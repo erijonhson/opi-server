@@ -38,6 +38,15 @@ public class Delegate implements Serializable {
 	@Column(name = "email", nullable = false)
 	private String email;
 
+	public Delegate() {
+		this("blank", "blank");
+	}
+
+	public Delegate(String name, String email) {
+		this.name = name;
+		this.email = email;
+	}
+
 	public Long getId() {
 		return id;
 	}

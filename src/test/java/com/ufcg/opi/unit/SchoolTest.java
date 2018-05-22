@@ -1,4 +1,4 @@
-package com.ufcg.opi.pojo;
+package com.ufcg.opi.unit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,7 @@ import com.ufcg.opi.models.School;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SchoolTests {
+public class SchoolTest {
 
 	@Test
 	public void constructorTest() {
