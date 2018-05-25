@@ -1,4 +1,4 @@
-package com.ufcg.opi.models;
+package br.edu.ufcg.dsc.opi.models;
 
 import java.io.Serializable;
 
@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Delegate responsible for one or more schools.
@@ -19,6 +21,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tb_delegate")
+@ApiIgnore
 public class Delegate implements Serializable {
 
 	private static final long serialVersionUID = -4762740963019321048L;
@@ -28,23 +31,28 @@ public class Delegate implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
-	@Size(min=3, max=256)
+	@NotEmpty
+	@Size(min = 3, max = 256, message = "Nome deve ter entre 3 e 256 caracteres")
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@NotNull
+	@NotEmpty
 	@Email
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
 	public Delegate() {
-		this("blank", "blank");
+		this("blank", "blank@blank.com");
 	}
 
 	public Delegate(String name, String email) {
 		this.name = name;
 		this.email = email;
+	}
+
+	public Delegate(Long id) {
+		this();
+		this.id = id;
 	}
 
 	public Long getId() {

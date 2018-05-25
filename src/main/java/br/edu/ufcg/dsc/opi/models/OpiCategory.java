@@ -1,4 +1,4 @@
-package com.ufcg.opi.models;
+package br.edu.ufcg.dsc.opi.models;
 
 /**
  * Category of the OPI, namely: <br>

@@ -1,4 +1,4 @@
-package com.ufcg.opi;
+package br.edu.ufcg.dsc.opi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

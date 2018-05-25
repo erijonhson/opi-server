@@ -1,4 +1,4 @@
-package com.ufcg.opi.models;
+package br.edu.ufcg.dsc.opi.models;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -16,11 +16,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Partner school of the OPI.
@@ -38,19 +37,19 @@ public class School implements Serializable {
 	@Column(name = "id")
 	private Long id;
 
-	@NotNull
+	@NotEmpty
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@NotNull
+	@NotEmpty
 	@Column(name = "city", nullable = false)
 	private String city;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "school")
 	private Set<SchoolPhoneNumber> schoolPhoneNumbers;
 
-	@OneToOne(fetch = FetchType.EAGER)
-    @MapsId
+	@ManyToOne //(fetch = FetchType.LAZY)
+	@JoinColumn(name = "delegate_id")
 	private Delegate delegate;
 
 	@ElementCollection(targetClass = OpiCategory.class)
@@ -69,6 +68,10 @@ public class School implements Serializable {
 		this.schoolPhoneNumbers = schoolPhoneNumbers;
 		this.delegate = delegate;
 		this.categories = categories;
+		
+		for (SchoolPhoneNumber number : this.schoolPhoneNumbers) {
+			number.setSchool(this);
+		}
 	}
 
 	public Long getId() {
@@ -99,8 +102,12 @@ public class School implements Serializable {
 		this.delegate = delegate;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Set<SchoolPhoneNumber> getSchoolPhoneNumbers() {
+		return schoolPhoneNumbers;
+	}
+
+	public Set<OpiCategory> getCategories() {
+		return categories;
 	}
 
 }

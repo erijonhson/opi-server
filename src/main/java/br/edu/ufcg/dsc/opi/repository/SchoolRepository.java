@@ -1,9 +1,9 @@
-package com.ufcg.opi.repository;
+package br.edu.ufcg.dsc.opi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ufcg.opi.models.School;
+import br.edu.ufcg.dsc.opi.models.School;
 
 /**
  * Persistence layer to School.

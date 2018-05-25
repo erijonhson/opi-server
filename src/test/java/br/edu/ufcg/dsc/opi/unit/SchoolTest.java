@@ -1,4 +1,4 @@
-package com.ufcg.opi.unit;
+package br.edu.ufcg.dsc.opi.unit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.ufcg.opi.models.Delegate;
-import com.ufcg.opi.models.School;
+import br.edu.ufcg.dsc.opi.models.Delegate;
+import br.edu.ufcg.dsc.opi.models.School;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
