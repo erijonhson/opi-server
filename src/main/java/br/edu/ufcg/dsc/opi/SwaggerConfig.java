@@ -40,13 +40,14 @@ public class SwaggerConfig {
 
 	@Bean
 	public Docket api() {
+		final String REJECT_SLASH_AT_END = "^.*[^//]$";
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(DEFAULT_API_INFO)
 				.produces(DEFAULT_PRODUCES_AND_CONSUMES)
 				.consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 				.select()
 				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
+				.paths(PathSelectors.regex(REJECT_SLASH_AT_END))
 				.build();
 	}
 
