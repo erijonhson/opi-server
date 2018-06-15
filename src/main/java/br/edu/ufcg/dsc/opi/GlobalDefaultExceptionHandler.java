@@ -2,6 +2,8 @@ package br.edu.ufcg.dsc.opi;
 
 import java.util.Date;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,7 +41,7 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 	 * 
 	 * @param exception
 	 * @param request
-	 * @return
+	 * @return ExceptionResponse
 	 */
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
@@ -61,7 +63,22 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 				ex.getBindingResult().toString());
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.CONFLICT);
 	}
-	
-	
+
+	/**
+	 * Captures Constraint Violations in validations and sends error occurred with
+	 * status Bad Request (HTTP 400).
+	 * 
+	 * @param exception
+	 * @param request
+	 * @return ExceptionResponse
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ConstraintViolationException.class)
+	public final ExceptionResponse handleConstraintViolationException(ConstraintViolationException exception,
+			WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
+				request.getDescription(false));
+		return exceptionResponse;
+	}
 
 }

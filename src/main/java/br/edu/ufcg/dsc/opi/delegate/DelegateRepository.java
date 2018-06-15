@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "delegateRepository")
 public interface DelegateRepository extends JpaRepository<DelegateModel, Long> {
 
-	public Collection<DelegateModel> findByEmail(String email);
+	public Collection<DelegateModel> findByEmailContaining(String email);
 
 }

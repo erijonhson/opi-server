@@ -7,21 +7,25 @@ import java.util.HashSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.edu.ufcg.dsc.opi.TestJPAConfig;
+import br.edu.ufcg.dsc.opi.OpiServerApplication;
 import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
 import br.edu.ufcg.dsc.opi.school.SchoolModel;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = { OpiServerApplication.class,
+		TestJPAConfig.class })
 public class SchoolTest {
 
 	@Test
 	public void constructorTest() {
-		SchoolModel school = new SchoolModel("Test School", "Test City", new HashSet<>(), new DelegateModel(), new HashSet<>());
+		SchoolModel school = new SchoolModel("Test School", "Test City", new HashSet<>(), new DelegateModel(),
+				new HashSet<>());
 
 		assertEquals(school.getName(), "Test School");
 	}
 
 }
-

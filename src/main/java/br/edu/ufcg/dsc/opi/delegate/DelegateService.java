@@ -23,7 +23,7 @@ public class DelegateService {
 
 	public Collection<DelegateDTO> indexByEmail(String email) {
 		Collection<DelegateDTO> delegatesDTO = new HashSet<>();
-		Collection<DelegateModel> delegates = delegateRepository.findByEmail(email);
+		Collection<DelegateModel> delegates = delegateRepository.findByEmailContaining(email);
 		for (DelegateModel delegate : delegates) {
 			delegatesDTO.add(new DelegateDTO(
 					delegate.getName(), 
