@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.models;
+package br.edu.ufcg.dsc.opi.school;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -21,6 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
+import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
+
 /**
  * Partner school of the OPI.
  * 
@@ -28,7 +31,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "tb_school")
-public class School implements Serializable {
+public class SchoolModel implements Serializable {
 
 	private static final long serialVersionUID = -178445149567395447L;
 
@@ -50,7 +53,7 @@ public class School implements Serializable {
 
 	@ManyToOne //(fetch = FetchType.LAZY)
 	@JoinColumn(name = "delegate_id")
-	private Delegate delegate;
+	private DelegateModel delegate;
 
 	@ElementCollection(targetClass = OpiCategory.class)
 	@CollectionTable(name = "tb_opi_category", joinColumns = @JoinColumn(name = "school_id"))
@@ -58,11 +61,11 @@ public class School implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Set<OpiCategory> categories;
 
-	public School() {
-		this("blank", "blank", new HashSet<>(), new Delegate(), new HashSet<>());
+	public SchoolModel() {
+		this("blank", "blank", new HashSet<>(), new DelegateModel(), new HashSet<>());
 	}
 
-	public School(String name, String city, Set<SchoolPhoneNumber> schoolPhoneNumbers, Delegate delegate, Set<OpiCategory> categories) {
+	public SchoolModel(String name, String city, Set<SchoolPhoneNumber> schoolPhoneNumbers, DelegateModel delegate, Set<OpiCategory> categories) {
 		this.name = name;
 		this.city = city;
 		this.schoolPhoneNumbers = schoolPhoneNumbers;
@@ -94,11 +97,11 @@ public class School implements Serializable {
 		this.city = city;
 	}
 
-	public Delegate getDelegate() {
+	public DelegateModel getDelegate() {
 		return delegate;
 	}
 
-	public void setDelegate(Delegate delegate) {
+	public void setDelegate(DelegateModel delegate) {
 		this.delegate = delegate;
 	}
 

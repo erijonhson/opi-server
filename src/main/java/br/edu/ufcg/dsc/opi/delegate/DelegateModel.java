@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.models;
+package br.edu.ufcg.dsc.opi.delegate;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Entity
 @Table(name = "tb_delegate")
 @ApiIgnore
-public class Delegate implements Serializable {
+public class DelegateModel implements Serializable {
 
 	private static final long serialVersionUID = -4762740963019321048L;
 
@@ -41,16 +41,16 @@ public class Delegate implements Serializable {
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	public Delegate() {
+	public DelegateModel() {
 		this("blank", "blank@blank.com");
 	}
 
-	public Delegate(String name, String email) {
+	public DelegateModel(String name, String email) {
 		this.name = name;
 		this.email = email;
 	}
 
-	public Delegate(Long id) {
+	public DelegateModel(Long id) {
 		this();
 		this.id = id;
 	}
@@ -86,9 +86,9 @@ public class Delegate implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Delegate))
+		if (!(obj instanceof DelegateModel))
 			return false;
-		Delegate delegate = (Delegate) obj;
+		DelegateModel delegate = (DelegateModel) obj;
 		if (email == null) {
 			if (delegate.email != null)
 				return false;

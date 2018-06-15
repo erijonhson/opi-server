@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.edu.ufcg.dsc.opi.exception.ExceptionResponse;
+import br.edu.ufcg.dsc.opi.util.ExceptionResponse;
 
 /**
  * Captures system exceptions in the context of the Dispatcher Servlet. That is,

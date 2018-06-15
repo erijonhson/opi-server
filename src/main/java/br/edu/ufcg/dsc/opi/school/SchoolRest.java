@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.rest;
+package br.edu.ufcg.dsc.opi.school;
 
 import java.net.URI;
 import java.util.Collection;
@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.edu.ufcg.dsc.opi.dto.SchoolDTO;
-import br.edu.ufcg.dsc.opi.models.School;
-import br.edu.ufcg.dsc.opi.service.SchoolService;
+import br.edu.ufcg.dsc.opi.util.RestConstants;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -34,11 +32,10 @@ public class SchoolRest {
 	 */
 	@PostMapping({ "/", "" })
 	@ApiOperation(
-			value = "Create a School", 
-			notes = "Also returns a link to retrieve the saved school in the location header"
-	)
+		value = "Create a School", 
+		notes = "Also returns a link to retrieve the saved school in the location header")
 	public ResponseEntity<Object> createSchool(@Valid @RequestBody SchoolDTO school) {
-		School savedSchool = schoolService.create(school.toModel());
+		SchoolModel savedSchool = schoolService.create(school.toModel());
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedSchool.getId()).toUri();
@@ -47,6 +44,7 @@ public class SchoolRest {
 	}
 
 	@GetMapping({ "/", "" })
+	@ApiOperation(value = "Index Schools")
 	public Collection<SchoolDTO> indexSchool() {
 		return schoolService.index();
 	}

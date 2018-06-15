@@ -1,19 +1,18 @@
-package br.edu.ufcg.dsc.opi.dto;
+package br.edu.ufcg.dsc.opi.school;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
-import br.edu.ufcg.dsc.opi.models.Delegate;
-import br.edu.ufcg.dsc.opi.models.OpiCategory;
-import br.edu.ufcg.dsc.opi.models.School;
-import br.edu.ufcg.dsc.opi.models.SchoolPhoneNumber;
+import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
+import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
+import br.edu.ufcg.dsc.opi.util.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value="school")
-public class SchoolDTO implements DTO<School> {
+@ApiModel(value="School")
+public class SchoolDTO implements DTO<SchoolModel> {
 
 	@ApiModelProperty(example = "Universidade Federal de Campina Grande")
 	@NotEmpty(message = "Colégio deve ter um nome")
@@ -41,7 +40,7 @@ public class SchoolDTO implements DTO<School> {
 		this(null, null, null, null, null);
 	}
 
-	public SchoolDTO(String name, String city, Delegate delegate, Set<SchoolPhoneNumber> phoneNumbers, Set<OpiCategory> categories) {
+	public SchoolDTO(String name, String city, DelegateModel delegate, Set<SchoolPhoneNumber> phoneNumbers, Set<OpiCategory> categories) {
 		this.name = name != null ? name : "blank";
 		this.city = city != null ? city : "blank";
 		this.delegateId = delegate != null ? delegate.getId() : 0L;
@@ -63,13 +62,13 @@ public class SchoolDTO implements DTO<School> {
 	}
 
 	@Override
-	public School toModel() {
-		Delegate delegate = new Delegate(delegateId);
+	public SchoolModel toModel() {
+		DelegateModel delegate = new DelegateModel(delegateId);
 		Set<SchoolPhoneNumber> schoolPhoneNumbers = new HashSet<>();
 		for (String s : phoneNumbers) {
 		    schoolPhoneNumbers.add(new SchoolPhoneNumber(s));
 		}
-		return new School(name, city, schoolPhoneNumbers, delegate, categories);
+		return new SchoolModel(name, city, schoolPhoneNumbers, delegate, categories);
 	}
 
 	public String getName() {

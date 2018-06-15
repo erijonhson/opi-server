@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.rest;
+package br.edu.ufcg.dsc.opi.delegate;
 
 import java.net.URI;
 import java.util.Collection;
@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.edu.ufcg.dsc.opi.dto.DelegateDTO;
-import br.edu.ufcg.dsc.opi.models.Delegate;
-import br.edu.ufcg.dsc.opi.service.DelegateService;
+import br.edu.ufcg.dsc.opi.util.RestConstants;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -36,11 +34,10 @@ public class DelegateRest {
 	 */
 	@PostMapping({ "/", "" })
 	@ApiOperation(
-			value = "Create a Delegate", 
-			notes = "Also returns a link to retrieve the saved delegate in the location header"
-	)
+		value = "Create a Delegate", 
+		notes = "Also returns a link to retrieve the saved delegate in the location header")
 	public ResponseEntity<Object> createDelegate(@Valid @RequestBody DelegateDTO delegate) {
-		Delegate savedDelegate = delegateService.create(delegate.toModel());
+		DelegateModel savedDelegate = delegateService.create(delegate.toModel());
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedDelegate.getId()).toUri();

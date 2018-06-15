@@ -1,11 +1,9 @@
-package br.edu.ufcg.dsc.opi.repository;
+package br.edu.ufcg.dsc.opi.delegate;
 
 import java.util.Collection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import br.edu.ufcg.dsc.opi.models.Delegate;
 
 /**
  * Persistence layer to Delegate.
@@ -13,8 +11,8 @@ import br.edu.ufcg.dsc.opi.models.Delegate;
  * @author Eri Jonhson
  */
 @Repository(value = "delegateRepository")
-public interface DelegateRepository extends JpaRepository<Delegate, Long> {
+public interface DelegateRepository extends JpaRepository<DelegateModel, Long> {
 
-	public Collection<Delegate> findByEmail(String email);
+	public Collection<DelegateModel> findByEmail(String email);
 
 }

@@ -1,15 +1,15 @@
-package br.edu.ufcg.dsc.opi.dto;
+package br.edu.ufcg.dsc.opi.delegate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import br.edu.ufcg.dsc.opi.models.Delegate;
+import br.edu.ufcg.dsc.opi.util.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "delegate")
-public class DelegateDTO implements DTO<Delegate> {
+@ApiModel(value = "Delegate")
+public class DelegateDTO implements DTO<DelegateModel> {
 
 	@ApiModelProperty(example = "Rohit Gheyi")
 	@NotEmpty
@@ -31,8 +31,8 @@ public class DelegateDTO implements DTO<Delegate> {
 	}
 
 	@Override
-	public Delegate toModel() {
-		return new Delegate(name, email);
+	public DelegateModel toModel() {
+		return new DelegateModel(name, email);
 	}
 
 	public String getName() {

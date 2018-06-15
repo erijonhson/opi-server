@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.rest;
+package br.edu.ufcg.dsc.opi.util;
 
 public class RestConstants {
 

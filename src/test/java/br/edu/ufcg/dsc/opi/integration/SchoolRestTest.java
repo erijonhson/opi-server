@@ -16,10 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.edu.ufcg.dsc.opi.dto.DelegateDTO;
-import br.edu.ufcg.dsc.opi.dto.SchoolDTO;
-import br.edu.ufcg.dsc.opi.models.OpiCategory;
-import br.edu.ufcg.dsc.opi.rest.RestConstants;
+import br.edu.ufcg.dsc.opi.delegate.DelegateDTO;
+import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
+import br.edu.ufcg.dsc.opi.school.SchoolDTO;
+import br.edu.ufcg.dsc.opi.util.RestConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

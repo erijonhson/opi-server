@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.models;
+package br.edu.ufcg.dsc.opi.school;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +32,7 @@ public class SchoolPhoneNumber {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id", nullable = false)
-	private School school;
+	private SchoolModel school;
 
 	public SchoolPhoneNumber() {
 		this("blank");
@@ -54,11 +54,11 @@ public class SchoolPhoneNumber {
 		this.number = number;
 	}
 
-	public School getSchool() {
+	public SchoolModel getSchool() {
 		return school;
 	}
 
-	public void setSchool(School school) {
+	public void setSchool(SchoolModel school) {
 		this.school = school;
 	}
 

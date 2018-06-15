@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.dto;
+package br.edu.ufcg.dsc.opi.util;
 
 /**
  * Defines interface to transfer objects.

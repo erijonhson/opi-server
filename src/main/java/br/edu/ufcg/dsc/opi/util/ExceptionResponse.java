@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.exception;
+package br.edu.ufcg.dsc.opi.util;
 
 import java.util.Date;
 

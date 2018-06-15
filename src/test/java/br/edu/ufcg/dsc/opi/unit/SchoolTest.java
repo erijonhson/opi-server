@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.edu.ufcg.dsc.opi.models.Delegate;
-import br.edu.ufcg.dsc.opi.models.School;
+import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
+import br.edu.ufcg.dsc.opi.school.SchoolModel;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,7 +18,7 @@ public class SchoolTest {
 
 	@Test
 	public void constructorTest() {
-		School school = new School("Test School", "Test City", new HashSet<>(), new Delegate(), new HashSet<>());
+		SchoolModel school = new SchoolModel("Test School", "Test City", new HashSet<>(), new DelegateModel(), new HashSet<>());
 
 		assertEquals(school.getName(), "Test School");
 	}
