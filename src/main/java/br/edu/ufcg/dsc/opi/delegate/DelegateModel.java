@@ -34,7 +34,7 @@ public class DelegateModel implements Serializable, User {
 	private Long id;
 
 	@OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
 	private UserModel user;
 
 	public DelegateModel() {
@@ -96,6 +96,11 @@ public class DelegateModel implements Serializable, User {
 	@Override
 	public String getLogin() {
 		return user.getLogin();
+	}
+
+	@Override
+	public String[] getRoles() {
+		return user.getRoles();
 	}
 
 	@Override

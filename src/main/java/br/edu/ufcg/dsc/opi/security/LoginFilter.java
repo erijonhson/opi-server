@@ -61,7 +61,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		User user = (User) auth.getPrincipal();
 		UserDTO dto = user.toDTO();
-		TokenAuthenticationService.addAuthentication(dto, user.getLogin());
+		TokenAuthenticationService.addAuthentication(user, dto);
 		response.getWriter().write(JSonUtil.toJSon(dto));
 	}
 }

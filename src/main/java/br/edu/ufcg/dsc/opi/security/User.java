@@ -15,6 +15,8 @@ public interface User {
 	 */
 	public String getLogin();
 
+	public String[] getRoles();
+
 	/**
 	 * User default data transfer object.
 	 * 

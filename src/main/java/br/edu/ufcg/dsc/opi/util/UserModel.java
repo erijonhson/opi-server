@@ -100,6 +100,12 @@ public class UserModel implements Serializable, User {
 	}
 
 	@Override
+	public String[] getRoles() {
+		String[] roles = { role.toString() };
+		return roles;
+	}
+
+	@Override
 	public UserDTO toDTO() {
 		return new UserDTO(name, email, password, role);
 	}
