@@ -44,6 +44,7 @@ public class DelegateService implements br.edu.ufcg.dsc.opi.security.UserService
 		Collection<DelegateDTO> delegatesDTO = new HashSet<>();
 		Collection<DelegateModel> delegates = delegateRepository.findByUserEmailContaining(email);
 		for (DelegateModel delegate : delegates) {
+			delegate.setPassword(null);
 			delegatesDTO.add((DelegateDTO) delegate.toDTO());
 		}
 		return delegatesDTO;

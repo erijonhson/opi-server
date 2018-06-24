@@ -25,14 +25,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().disable().csrf().disable().authorizeRequests()
-				.antMatchers(RestConstants.ADMIN_URI + "*").hasRole(Roles.ADMIN.toString())
-				.antMatchers(RestConstants.SCHOOL_URI + "*").hasAnyRole(Roles.ADMIN.toString(), Roles.COLLABORATOR.toString(), Roles.DELEGATE.toString())
+				//.antMatchers(RestConstants.ADMIN_URI + "*").hasRole(Roles.ADMIN.toString())
+				//.antMatchers(RestConstants.SCHOOL_URI + "*").hasAnyRole(Roles.ADMIN.toString(), Roles.COLLABORATOR.toString(), Roles.DELEGATE.toString())
 				.antMatchers(HttpMethod.POST, "/api/delegates/login").permitAll()
 				.antMatchers(HttpMethod.POST, "/refresh-access").permitAll()
 				.antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
 				.antMatchers(HttpMethod.GET, "/configuration/ui/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
-				// .antMatchers(HttpMethod.GET, "/configuration/security/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/configuration/security/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/webjars/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/swagger-ui.html/**").permitAll()
 				.anyRequest().authenticated().and()

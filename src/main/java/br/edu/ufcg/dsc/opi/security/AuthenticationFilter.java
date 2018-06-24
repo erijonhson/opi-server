@@ -21,38 +21,38 @@ import io.jsonwebtoken.JwtException;
  */
 public class AuthenticationFilter extends GenericFilterBean {
 
-    /**
-     * (non-Javadoc)
-     *
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
-     *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
-     */
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+	 *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 */
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 
-        HttpServletResponse res = SecurityUtils.fillAccessControlHeader((HttpServletResponse) response);
-        try {
-            HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = SecurityUtils.fillAccessControlHeader((HttpServletResponse) response);
+		try {
+			HttpServletRequest req = (HttpServletRequest) request;
 
-            /*
-             * If it is a OPTIONS request (usually used for check, return OK
-             * because there is no header
-             */
-            if (RequestMethod.OPTIONS.name().equalsIgnoreCase(req.getMethod())) {
-                res.setStatus(HttpServletResponse.SC_OK);
-                return;
-            }
-            
-            /* Checks the Authorization */
-            Authentication auth = TokenAuthenticationService.getAuthentication(req);
+			/*
+			 * If it is a OPTIONS request (usually used for check, return OK
+			 * because there is no header
+			 */
+			if (RequestMethod.OPTIONS.name().equalsIgnoreCase(req.getMethod())) {
+				res.setStatus(HttpServletResponse.SC_OK);
+				return;
+			}
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+			/* Checks the Authorization */
+			Authentication auth = TokenAuthenticationService.getAuthentication(req);
 
-            chain.doFilter(request, response);
-        } catch (JwtException e) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-    }
+			SecurityContextHolder.getContext().setAuthentication(auth);
+
+			chain.doFilter(request, response);
+		} catch (JwtException e) {
+			res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+	}
 
 }

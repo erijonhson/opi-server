@@ -1,11 +1,22 @@
 package br.edu.ufcg.dsc.opi.security;
 
+import javax.validation.constraints.NotEmpty;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Credentials of the Account.
  */
+@ApiModel(value = "AccountCredentials")
 public class AccountCredentials {
 
+	@ApiModelProperty(example = "admin@admin.com")
+	@NotEmpty
     private String username;
+
+	@ApiModelProperty(example = "abcde")
+	@NotEmpty
     private String password;
 
     public String getUsername() {

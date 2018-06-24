@@ -9,6 +9,8 @@ import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 @ApiModel(value = "Delegate")
 public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
@@ -23,7 +25,7 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	@Email
 	private String email;
 
-	@ApiModelProperty(example = "5ecr3t0p153rv3r")
+	@ApiModelProperty(example = "abcde")
 	@NotEmpty
 	private String password;
 
@@ -31,10 +33,10 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	@NotEmpty
 	private Roles role;
 
-	@ApiModelProperty(example = "uhoaiuhskuiabhkuiybakf")
+	@ApiModelProperty(name = "jwt", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzAyODcyNzV9.orNXJJBUYC0Orcm-zMJULaPlcnwB9Iw7UwM532XVEYhclH624MzI32zKDIRTKHEYwtOPg_OJMQyin4itxs9MjA")
 	private String jwt;
 
-	@ApiModelProperty(example = "gauholiuhaolijshsldiui")
+	@ApiModelProperty(name = "refresh", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzI0NDcyNzV9.2V48VZoDU3amGdJDKTJl4VuMlqGzCnZhCkD7UXFpUIUDnnvSM52oRS3UGq9Ri_hCtXkDeAUW7YfSws9JyuZLaw")
 	private String refresh;
 
 	public DelegateDTO() {
@@ -81,19 +83,39 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Roles getRole() {
 		return role;
 	}
 
-	@Override
-	public void setToken(String jwt) {
+	public String getJwt() {
+		return jwt;
+	}
+
+	public void setJwt(String jwt) {
 		this.jwt = jwt;
 	}
 
+	public String getRefresh() {
+		return refresh;
+	}
+
+	public void setRefresh(String refresh) {
+		this.refresh = refresh;
+	}
+
+	@ApiIgnore
+	@ApiParam(value="dummy", hidden=true, required=false)
+	@Override
+	public void setToken(String jwt) {
+		this.setJwt(jwt);
+	}
+
+	@ApiIgnore
+	@ApiParam(value="dummy", hidden=true, required=false)
 	@Override
 	public void setRefreshToken(String refresh) {
-		this.refresh = refresh;
+		this.setRefresh(refresh);
 	}
 
 }
