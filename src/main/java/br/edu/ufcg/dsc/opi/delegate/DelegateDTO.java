@@ -4,12 +4,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import br.edu.ufcg.dsc.opi.security.Roles;
+import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "Delegate")
-public class DelegateDTO implements DTO<DelegateModel> {
+public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 
 	@ApiModelProperty(example = "Rohit Gheyi")
 	@NotEmpty
@@ -21,6 +23,20 @@ public class DelegateDTO implements DTO<DelegateModel> {
 	@Email
 	private String email;
 
+	@ApiModelProperty(example = "5ecr3t0p153rv3r")
+	@NotEmpty
+	private String password;
+
+	@ApiModelProperty(example = "DELEGATE")
+	@NotEmpty
+	private Roles role;
+
+	@ApiModelProperty(example = "uhoaiuhskuiabhkuiybakf")
+	private String jwt;
+
+	@ApiModelProperty(example = "gauholiuhaolijshsldiui")
+	private String refresh;
+
 	public DelegateDTO() {
 		this("blank", "blank");
 	}
@@ -30,9 +46,16 @@ public class DelegateDTO implements DTO<DelegateModel> {
 		this.email = email;
 	}
 
+	public DelegateDTO(String name, String email, String password, Roles role) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+	}
+
 	@Override
 	public DelegateModel toModel() {
-		return new DelegateModel(name, email);
+		return new DelegateModel(getName(), getEmail(), getPassword(), getRole());
 	}
 
 	public String getName() {
@@ -49,6 +72,28 @@ public class DelegateDTO implements DTO<DelegateModel> {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public Roles getRole() {
+		return role;
+	}
+
+	@Override
+	public void setToken(String jwt) {
+		this.jwt = jwt;
+	}
+
+	@Override
+	public void setRefreshToken(String refresh) {
+		this.refresh = refresh;
 	}
 
 }

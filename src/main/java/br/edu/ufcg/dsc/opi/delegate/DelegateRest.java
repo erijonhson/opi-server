@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.edu.ufcg.dsc.opi.security.AccountCredentials;
+import br.edu.ufcg.dsc.opi.util.CryptoUtil;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import io.swagger.annotations.ApiOperation;
 
@@ -31,13 +33,12 @@ public class DelegateRest {
 	/**
 	 * Endpoint to create a Delegate.
 	 * 
-	 * @param delegate to be created
+	 * @param delegate
+	 *            to be created
 	 * @return status
 	 */
 	@PostMapping({ "/", "" })
-	@ApiOperation(
-		value = "Create a Delegate", 
-		notes = "Also returns a link to retrieve the saved delegate in the location header")
+	@ApiOperation(value = "Create a Delegate", notes = "Also returns a link to retrieve the saved delegate in the location header")
 	public ResponseEntity<Object> createDelegate(@Valid @RequestBody DelegateDTO delegate) {
 		DelegateModel savedDelegate = delegateService.create(delegate.toModel());
 
@@ -49,8 +50,15 @@ public class DelegateRest {
 
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Finds a Delegate by e-mail")
-	public Collection<DelegateDTO> indexDelegateByEmail(@Size(min=5, max=256) @RequestParam String email) {
+	public Collection<DelegateDTO> indexDelegateByEmail(@Size(min = 5, max = 256) @RequestParam String email) {
 		return delegateService.indexByEmail(email);
 	}
 
+	@PostMapping({ "/login/", "/login" })
+	@ApiOperation(value = "Login a Delegate")
+	public DelegateDTO loginDelegate(@RequestBody AccountCredentials accountCredentials) {
+		return (DelegateDTO) delegateService
+				.login(accountCredentials.getUsername(), CryptoUtil.hashPassword(accountCredentials.getPassword()))
+				.toDTO();
+	}
 }
