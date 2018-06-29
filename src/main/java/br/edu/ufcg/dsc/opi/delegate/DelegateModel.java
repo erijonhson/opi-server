@@ -1,6 +1,9 @@
 package br.edu.ufcg.dsc.opi.delegate;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import br.edu.ufcg.dsc.opi.security.Roles;
-import br.edu.ufcg.dsc.opi.security.User;
-import br.edu.ufcg.dsc.opi.util.UserModel;
+import br.edu.ufcg.dsc.opi.util.user.User;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -24,7 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Entity
 @Table(name = "tb_delegate")
 @ApiIgnore
-public class DelegateModel implements Serializable, User {
+public class DelegateModel implements Serializable, User<DelegateDTO> {
 
 	private static final long serialVersionUID = -4762740963019321048L;
 
@@ -38,11 +43,12 @@ public class DelegateModel implements Serializable, User {
 	private UserModel user;
 
 	public DelegateModel() {
-		this("blank", "blank@blank.com", "blank", Roles.DELEGATE);
+		this("blank", "blank@blank.com", "blank", EnumSet.of(Roles.DELEGATE));
 	}
 
-	public DelegateModel(String name, String email, String password, Roles role) {
-		user = new UserModel(name, email, password, role);
+	public DelegateModel(String name, String email, String password, Set<Roles> roles) {
+		if (roles == null) roles = EnumSet.of(Roles.DELEGATE);
+		this.user = new UserModel(name, email, password, roles);
 	}
 
 	public DelegateModel(Long id) {
@@ -76,13 +82,13 @@ public class DelegateModel implements Serializable, User {
 	public void setPassword(String password) {
 		user.setPassword(password);
 	}
-
-	public Roles getRole() {
-		return user.getRole();
+	
+	public Set<Roles> getRoles() {
+		return user.getRoles();
 	}
 
-	public void setRole(Roles role) {
-		user.setRole(role);
+	public void setRoles(Set<Roles> roles) {
+		user.setRoles(roles);
 	}
 
 	public UserModel getUser() {
@@ -94,18 +100,38 @@ public class DelegateModel implements Serializable, User {
 	}
 
 	@Override
-	public String getLogin() {
-		return user.getLogin();
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return user.getAuthorities();
 	}
 
 	@Override
-	public String[] getRoles() {
-		return user.getRoles();
+	public String getUsername() {
+		return user.getUsername();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return user.isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return user.isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return user.isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return isEnabled();
 	}
 
 	@Override
 	public DelegateDTO toDTO() {
-		return new DelegateDTO(user.getName(), user.getEmail(), user.getPassword(), user.getRole());
+		return new DelegateDTO(getName(), getEmail(), getPassword(), getRoles());
 	}
 
 	@Override

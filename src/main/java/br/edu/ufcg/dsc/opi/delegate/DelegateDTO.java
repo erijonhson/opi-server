@@ -1,5 +1,7 @@
 package br.edu.ufcg.dsc.opi.delegate;
 
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -9,8 +11,6 @@ import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 @ApiModel(value = "Delegate")
 public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
@@ -30,14 +30,10 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	private String password;
 
 	@ApiModelProperty(example = "DELEGATE")
-	@NotEmpty
-	private Roles role;
+	private Set<Roles> roles;
 
-	@ApiModelProperty(name = "jwt", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzAyODcyNzV9.orNXJJBUYC0Orcm-zMJULaPlcnwB9Iw7UwM532XVEYhclH624MzI32zKDIRTKHEYwtOPg_OJMQyin4itxs9MjA")
-	private String jwt;
-
-	@ApiModelProperty(name = "refresh", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzI0NDcyNzV9.2V48VZoDU3amGdJDKTJl4VuMlqGzCnZhCkD7UXFpUIUDnnvSM52oRS3UGq9Ri_hCtXkDeAUW7YfSws9JyuZLaw")
-	private String refresh;
+	@ApiModelProperty(name = "token", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzAyODcyNzV9.orNXJJBUYC0Orcm-zMJULaPlcnwB9Iw7UwM532XVEYhclH624MzI32zKDIRTKHEYwtOPg_OJMQyin4itxs9MjA")
+	private String token;
 
 	public DelegateDTO() {
 		this("blank", "blank");
@@ -48,16 +44,16 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 		this.email = email;
 	}
 
-	public DelegateDTO(String name, String email, String password, Roles role) {
+	public DelegateDTO(String name, String email, String password, Set<Roles> roles) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.role = role;
+		this.roles = roles;
 	}
 
 	@Override
 	public DelegateModel toModel() {
-		return new DelegateModel(getName(), getEmail(), getPassword(), getRole());
+		return new DelegateModel(getName(), getEmail(), getPassword(), getRoles());
 	}
 
 	public String getName() {
@@ -84,38 +80,17 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 		this.password = password;
 	}
 
-	public Roles getRole() {
-		return role;
+	public Set<Roles> getRoles() {
+		return roles;
 	}
 
-	public String getJwt() {
-		return jwt;
+	public String getToken() {
+		return token;
 	}
 
-	public void setJwt(String jwt) {
-		this.jwt = jwt;
-	}
-
-	public String getRefresh() {
-		return refresh;
-	}
-
-	public void setRefresh(String refresh) {
-		this.refresh = refresh;
-	}
-
-	@ApiIgnore
-	@ApiParam(value="dummy", hidden=true, required=false)
 	@Override
-	public void setToken(String jwt) {
-		this.setJwt(jwt);
-	}
-
-	@ApiIgnore
-	@ApiParam(value="dummy", hidden=true, required=false)
-	@Override
-	public void setRefreshToken(String refresh) {
-		this.setRefresh(refresh);
+	public void setToken(String token) {
+		this.token= token;
 	}
 
 }

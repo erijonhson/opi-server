@@ -1,5 +1,7 @@
 package br.edu.ufcg.dsc.opi;
 
+import java.util.EnumSet;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import br.edu.ufcg.dsc.opi.delegate.DelegateDTO;
 import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
-import br.edu.ufcg.dsc.opi.delegate.DelegateService;
+import br.edu.ufcg.dsc.opi.delegate.DelegateServiceImpl;
 import br.edu.ufcg.dsc.opi.security.Roles;
 
 @Component
@@ -17,8 +19,8 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	boolean alreadySetup = false;
 
-	@Autowired(required = true)
-	DelegateService delegateService;
+	@Autowired
+	DelegateServiceImpl delegateService;
 
 	@Override
 	@Transactional
@@ -27,14 +29,13 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		if (alreadySetup)
 			return;
 
-		// TODO: Admin
-		createDefaultAdminIfNotFound(new DelegateModel("admin", "admin@admin.com", "abcde", Roles.ADMIN));
+		createDefaultDelegateIfNotFound(new DelegateModel("delegate", "delegate@delegate.com", "abcde", EnumSet.of(Roles.DELEGATE)));
 
 		alreadySetup = true;
 	}
 
 	@Transactional
-	private DelegateModel createDefaultAdminIfNotFound(DelegateModel delegate) {
+	private DelegateModel createDefaultDelegateIfNotFound(DelegateModel delegate) {
 		DelegateDTO savedDelegate = delegateService.showByEmail(delegate.getEmail());
 		if (savedDelegate == null) {
 			return delegateService.create(delegate);

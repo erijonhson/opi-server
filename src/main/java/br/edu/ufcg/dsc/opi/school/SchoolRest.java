@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ public class SchoolRest {
 	 * @param school to be register
 	 * @return status
 	 */
+	@PreAuthorize("hasAnyAuthority('ADMIN', 'DELEGATE')")
 	@PostMapping({ "/", "" })
 	@ApiOperation(
 		value = "Create a School", 
@@ -43,6 +45,7 @@ public class SchoolRest {
 		return ResponseEntity.created(location).build();
 	}
 
+	@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Index Schools")
 	public Collection<SchoolDTO> indexSchool() {

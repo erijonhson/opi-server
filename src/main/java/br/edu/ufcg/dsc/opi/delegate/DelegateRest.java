@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ufcg.dsc.opi.security.AccountCredentials;
-import br.edu.ufcg.dsc.opi.util.CryptoUtil;
+import br.edu.ufcg.dsc.opi.security.SecurityUtils;
+import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import io.swagger.annotations.ApiOperation;
 
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 public class DelegateRest {
 
 	@Autowired
-	private DelegateService delegateService;
+	private DelegateServiceImpl delegateService;
 
 	/**
 	 * Endpoint to create a Delegate.
@@ -48,6 +50,7 @@ public class DelegateRest {
 		return ResponseEntity.created(location).build();
 	}
 
+	@PreAuthorize("hasAnyAuthority('ADMIN', 'DELEGATE')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Finds a Delegate by e-mail")
 	public Collection<DelegateDTO> indexDelegateByEmail(@Size(min = 5, max = 256) @RequestParam String email) {
@@ -56,9 +59,13 @@ public class DelegateRest {
 
 	@PostMapping({ "/login/", "/login" })
 	@ApiOperation(value = "Login a Delegate")
-	public DelegateDTO loginDelegate(@RequestBody AccountCredentials accountCredentials) {
-		return (DelegateDTO) delegateService
-				.login(accountCredentials.getUsername(), CryptoUtil.hashPassword(accountCredentials.getPassword()))
-				.toDTO();
+	public ResponseEntity<DelegateDTO> loginDelegate(@RequestBody AccountCredentials accountCredentials) {
+		DelegateModel delegate = delegateService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
+		if (delegate == null) {
+			return ResponseEntity.notFound().build();
+		}
+		DelegateDTO delegateDTO = delegate.toDTO();
+		TokenAuthenticationService.addAuthentication(delegateDTO, delegate.getEmail());
+		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(delegateDTO);
 	}
 }

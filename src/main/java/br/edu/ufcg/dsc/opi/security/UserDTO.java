@@ -11,15 +11,8 @@ public interface UserDTO {
 	/**
 	 * Includes security key into DTO.
 	 * 
-	 * @param jwt
+	 * @param token
 	 */
-	public void setToken(String jwt);
-
-	/**
-	 * Includes security refresh key into DTO.
-	 * 
-	 * @param refresh
-	 */
-	public void setRefreshToken(String refresh);
+	public void setToken(String token);
 
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -76,6 +77,22 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 	@ExceptionHandler(ConstraintViolationException.class)
 	public final ExceptionResponse handleConstraintViolationException(ConstraintViolationException exception,
 			WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
+				request.getDescription(false));
+		return exceptionResponse;
+	}
+
+	/**
+	 * Captures Constraint Violations in validations and sends error occurred with
+	 * status Bad Request (HTTP 400).
+	 * 
+	 * @param exception
+	 * @param request
+	 * @return ExceptionResponse
+	 */
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ExceptionHandler(AccessDeniedException.class)
+	public final ExceptionResponse handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
 				request.getDescription(false));
 		return exceptionResponse;

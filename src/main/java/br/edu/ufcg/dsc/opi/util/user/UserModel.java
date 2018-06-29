@@ -1,21 +1,31 @@
-package br.edu.ufcg.dsc.opi.util;
+package br.edu.ufcg.dsc.opi.util.user;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import br.edu.ufcg.dsc.opi.security.Roles;
-import br.edu.ufcg.dsc.opi.security.User;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -26,7 +36,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 @Entity
 @Table(name = "tb_user")
-public class UserModel implements Serializable, User {
+@EntityListeners(UserModelListener.class)
+public class UserModel implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = -2449991389290724038L;
 
@@ -48,18 +59,33 @@ public class UserModel implements Serializable, User {
 	@Column(name = "password", nullable = false)
 	private String password;
 
+	@ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "tb_roles", joinColumns = @JoinColumn(name = "user_id"))
+	@Column(name = "name", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Roles role;
+	private Set<Roles> roles;
+
+	@Column(name = "expired", nullable = false, columnDefinition = "tinyint(1) default 0")
+	private boolean expired;
+
+	@Column(name = "locked", nullable = false, columnDefinition = "tinyint(1) default 0")
+	private boolean locked;
+
+	@Column(name = "credentials_expired", nullable = false, columnDefinition = "tinyint(1) default 0")
+	private boolean credentialsExpired;
+
+	@Column(name = "enabled", nullable = false, columnDefinition = "tinyint(1) default 1")
+	private boolean enabled = true;
 
 	public UserModel() {
 		this("blank", "blank@blank.com", "blank", null);
 	}
 
-	public UserModel(String name, String email, String password, Roles role) {
+	public UserModel(String name, String email, String password, Set<Roles> roles) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.setRole(role);
+		this.roles = roles;
 	}
 
 	public String getName() {
@@ -86,28 +112,12 @@ public class UserModel implements Serializable, User {
 		this.password = password;
 	}
 
-	public Roles getRole() {
-		return role;
-	}
-
-	public void setRole(Roles role) {
-		this.role = role;
-	}
-
-	@Override
-	public String getLogin() {
-		return email;
-	}
-
-	@Override
-	public String[] getRoles() {
-		String[] roles = { role.toString() };
+	public Set<Roles> getRoles() {
 		return roles;
 	}
 
-	@Override
-	public UserDTO toDTO() {
-		return new UserDTO(name, email, password, role);
+	public void setRoles(Set<Roles> roles) {
+		this.roles = roles;
 	}
 
 	@Override
@@ -135,6 +145,41 @@ public class UserModel implements Serializable, User {
 		} else if (!name.equals(userModel.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		String[] roles = new String[this.roles.size()];
+		int index = 0;
+		for (Roles role : this.roles) {
+			roles[index++] = role.toString();
+		}
+		return AuthorityUtils.createAuthorityList(roles);
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return !expired;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return !locked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return !credentialsExpired;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 }

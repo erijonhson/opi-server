@@ -1,9 +1,10 @@
-package br.edu.ufcg.dsc.opi.util;
+package br.edu.ufcg.dsc.opi.util.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufcg.dsc.opi.security.User;
+import br.edu.ufcg.dsc.opi.util.CryptoUtil;
 
 /**
  * Business logic layer to Simple User.
@@ -17,7 +18,7 @@ public class UserService implements br.edu.ufcg.dsc.opi.security.UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public User login(String login, String credentials) {
+	public UserModel login(String login, String credentials) {
 		UserModel user = userRepository.findByEmail(login);
 		if (user != null && CryptoUtil.matches(credentials, user.getPassword())) {
 			user.setPassword(null);
@@ -28,6 +29,11 @@ public class UserService implements br.edu.ufcg.dsc.opi.security.UserService {
 
 	public UserModel create(UserModel user) {
 		return userRepository.save(user);
+	}
+
+	@Override
+	public UserDetails findByLogin(String login) {
+		return userRepository.findByEmail(login);
 	}
 
 }
