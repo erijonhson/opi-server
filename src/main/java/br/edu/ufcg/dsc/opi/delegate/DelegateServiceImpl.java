@@ -4,11 +4,10 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.util.CryptoUtil;
@@ -52,7 +51,7 @@ public class DelegateServiceImpl implements DelegateService {
 		Collection<DelegateModel> delegates = delegateRepository.findByUserEmailContaining(email);
 		for (DelegateModel delegate : delegates) {
 			delegate.setPassword(null);
-			delegatesDTO.add((DelegateDTO) delegate.toDTO());
+			delegatesDTO.add(delegate.toDTO());
 		}
 		return delegatesDTO;
 	}

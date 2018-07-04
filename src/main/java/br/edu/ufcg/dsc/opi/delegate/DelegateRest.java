@@ -32,13 +32,6 @@ public class DelegateRest {
 	@Autowired
 	private DelegateServiceImpl delegateService;
 
-	/**
-	 * Endpoint to create a Delegate.
-	 * 
-	 * @param delegate
-	 *            to be created
-	 * @return status
-	 */
 	@PostMapping({ "/", "" })
 	@ApiOperation(value = "Create a Delegate", notes = "Also returns a link to retrieve the saved delegate in the location header")
 	public ResponseEntity<Object> createDelegate(@Valid @RequestBody DelegateDTO delegate) {
@@ -50,7 +43,7 @@ public class DelegateRest {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'DELEGATE')")
+	@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Finds a Delegate by e-mail")
 	public Collection<DelegateDTO> indexDelegateByEmail(@Size(min = 5, max = 256) @RequestParam String email) {
@@ -68,4 +61,5 @@ public class DelegateRest {
 		TokenAuthenticationService.addAuthentication(delegateDTO, delegate.getEmail());
 		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(delegateDTO);
 	}
+
 }

@@ -65,17 +65,17 @@ public class UserModel implements Serializable, UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Set<Roles> roles;
 
-	@Column(name = "expired", nullable = false, columnDefinition = "tinyint(1) default 0")
-	private boolean expired;
-
 	@Column(name = "locked", nullable = false, columnDefinition = "tinyint(1) default 0")
-	private boolean locked;
-
-	@Column(name = "credentials_expired", nullable = false, columnDefinition = "tinyint(1) default 0")
-	private boolean credentialsExpired;
+	private boolean locked = true;
 
 	@Column(name = "enabled", nullable = false, columnDefinition = "tinyint(1) default 1")
 	private boolean enabled = true;
+
+	@Column(name = "expired", nullable = false, columnDefinition = "tinyint(1) default 0")
+	private boolean expired = false;
+
+	@Column(name = "credentials_expired", nullable = false, columnDefinition = "tinyint(1) default 0")
+	private boolean credentialsExpired = false;
 
 	public UserModel() {
 		this("blank", "blank@blank.com", "blank", null);
@@ -86,6 +86,10 @@ public class UserModel implements Serializable, UserDetails {
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getName() {
@@ -118,6 +122,14 @@ public class UserModel implements Serializable, UserDetails {
 
 	public void setRoles(Set<Roles> roles) {
 		this.roles = roles;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	@Override
