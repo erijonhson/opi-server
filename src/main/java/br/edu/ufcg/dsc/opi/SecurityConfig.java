@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.edu.ufcg.dsc.opi.security.AuthenticationFilter;
+import br.edu.ufcg.dsc.opi.util.RestConstants;
 
 /**
  * Security Configuration.
@@ -27,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().disable().csrf().disable().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/*/login").permitAll()
+				.antMatchers(HttpMethod.POST, RestConstants.DELEGATE_URI).permitAll()
 				.antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
 				.antMatchers(HttpMethod.GET, "/configuration/ui/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/swagger-resources/**").permitAll()
