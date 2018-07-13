@@ -1,5 +1,7 @@
 package br.edu.ufcg.dsc.opi.admin;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -9,11 +11,13 @@ import javax.validation.constraints.Size;
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "Admin")
-public class AdminDTO implements DTO<AdminModel>, UserDTO {
+public class AdminDTO implements DTO<UserModel>, UserDTO {
 
 	@ApiModelProperty(example = "Rohit Gheyi")
 	@NotEmpty
@@ -52,8 +56,11 @@ public class AdminDTO implements DTO<AdminModel>, UserDTO {
 	}
 
 	@Override
-	public AdminModel toModel() {
-		return new AdminModel(getName(), getEmail(), getPassword(), getRoles());
+	public UserModel toModel() {
+		UserModel user = UserFactory.createAdminObject(getName(), getEmail(), getPassword(), getRoles());
+		user.setEnabled(true);
+		user.setLocked(false);
+		return user;
 	}
 
 	public String getName() {
@@ -91,6 +98,18 @@ public class AdminDTO implements DTO<AdminModel>, UserDTO {
 	@Override
 	public void setToken(String token) {
 		this.token= token;
+	}
+
+	public static AdminDTO toDTO(UserModel user) {
+		return new AdminDTO(user.getName(), user.getEmail(), null, user.getRoles());
+	}
+
+	public static Collection<AdminDTO> toDTO(Collection<UserModel> users) {
+		Collection<AdminDTO> delegatesDTO = new HashSet<>();
+		for (UserModel delegate : users) {
+			delegatesDTO.add(AdminDTO.toDTO(delegate));
+		}
+		return delegatesDTO;
 	}
 
 }

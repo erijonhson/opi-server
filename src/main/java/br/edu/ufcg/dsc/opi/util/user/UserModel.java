@@ -77,14 +77,24 @@ public class UserModel implements Serializable, UserDetails {
 	@Column(name = "credentials_expired", nullable = false, columnDefinition = "tinyint(1) default 0")
 	private boolean credentialsExpired = false;
 
-	public UserModel() {
+	protected UserModel() {
 		this("blank", "blank@blank.com", "blank", null);
 	}
 
-	public UserModel(String name, String email, String password, Set<Roles> roles) {
+	protected UserModel(String name, String email, String password, Set<Roles> roles) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.roles = roles;
+	}
+
+	protected UserModel(Long id, Set<Roles> roles) {
+		this();
+		this.id = id;
+	}
+
+	protected UserModel(Set<Roles> roles) {
+		this();
 		this.roles = roles;
 	}
 

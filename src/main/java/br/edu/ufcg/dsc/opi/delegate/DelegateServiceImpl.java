@@ -2,12 +2,10 @@ package br.edu.ufcg.dsc.opi.delegate;
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.util.CryptoUtil;
@@ -23,14 +21,11 @@ import br.edu.ufcg.dsc.opi.util.user.UserService;
 public class DelegateServiceImpl implements DelegateService {
 
 	@Autowired(required = true)
-	private DelegateRepository delegateRepository;
-
-	@Autowired(required = true)
 	private UserService userService;
 
 	@Override
-	public DelegateModel login(String login, String credentials) {
-		DelegateModel delegate = delegateRepository.findByUserEmail(login);
+	public UserModel login(String login, String credentials) {
+		UserModel delegate = userService.findByEmail(login);
 		if (delegate != null && CryptoUtil.matches(credentials, delegate.getPassword())) {
 			delegate.setPassword(null);
 			return delegate;
@@ -38,34 +33,27 @@ public class DelegateServiceImpl implements DelegateService {
 		return null;
 	}
 
-	@Transactional
-	public DelegateModel create(DelegateModel delegate) {
+	public UserModel create(UserModel delegate) {
 		delegate.setRoles(EnumSet.of(Roles.DELEGATE));
-		UserModel user = userService.create(delegate.getUser());
-		delegate.setUser(user);
-		return delegateRepository.save(delegate);
+		return userService.create(delegate);
 	}
 
 	public Collection<DelegateDTO> indexByEmail(String email) {
-		Collection<DelegateDTO> delegatesDTO = new HashSet<>();
-		Collection<DelegateModel> delegates = delegateRepository.findByUserEmailContaining(email);
-		for (DelegateModel delegate : delegates) {
-			delegate.setPassword(null);
-			delegatesDTO.add(delegate.toDTO());
-		}
-		return delegatesDTO;
+		Collection<UserModel> delegates = userService.findByEmailContaining(email);
+		return DelegateDTO.toDTO(delegates);
 	}
 
 	public DelegateDTO showByEmail(String email) {
-		DelegateModel delegateModel = delegateRepository.findByUserEmail(email);
-		if (delegateModel == null) {
+		UserModel delegate = userService.findByEmail(email);
+		if (delegate == null) {
 			return null;
 		}
-		return delegateModel.toDTO();
+		return DelegateDTO.toDTO(delegate);
 	}
 
 	@Override
 	public UserDetails findByLogin(String login) {
-		return delegateRepository.findByUserEmail(login);
+		return userService.findByLogin(login);
 	}
+
 }

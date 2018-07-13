@@ -22,6 +22,7 @@ import br.edu.ufcg.dsc.opi.security.AccountCredentials;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
 import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -35,7 +36,7 @@ public class DelegateRest {
 	@PostMapping({ "/", "" })
 	@ApiOperation(value = "Create a Delegate", notes = "Also returns a link to retrieve the saved delegate in the location header")
 	public ResponseEntity<Object> createDelegate(@Valid @RequestBody DelegateDTO delegate) {
-		DelegateModel savedDelegate = delegateService.create(delegate.toModel());
+		UserModel savedDelegate = delegateService.create(delegate.toModel());
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedDelegate.getId()).toUri();
@@ -53,11 +54,11 @@ public class DelegateRest {
 	@PostMapping({ "/login/", "/login" })
 	@ApiOperation(value = "Login a Delegate")
 	public ResponseEntity<DelegateDTO> loginDelegate(@RequestBody AccountCredentials accountCredentials) {
-		DelegateModel delegate = delegateService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
+		UserModel delegate = delegateService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
 		if (delegate == null) {
 			return ResponseEntity.notFound().build();
 		}
-		DelegateDTO delegateDTO = delegate.toDTO();
+		DelegateDTO delegateDTO = DelegateDTO.toDTO(delegate);
 		TokenAuthenticationService.addAuthentication(delegateDTO, delegate.getEmail());
 		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(delegateDTO);
 	}

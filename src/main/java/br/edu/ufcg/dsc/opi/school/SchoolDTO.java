@@ -5,9 +5,10 @@ import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
-import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
 import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
 import br.edu.ufcg.dsc.opi.util.DTO;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -40,7 +41,7 @@ public class SchoolDTO implements DTO<SchoolModel> {
 		this(null, null, null, null, null);
 	}
 
-	public SchoolDTO(String name, String city, DelegateModel delegate, Set<SchoolPhoneNumber> phoneNumbers, Set<OpiCategory> categories) {
+	public SchoolDTO(String name, String city, UserModel delegate, Set<SchoolPhoneNumber> phoneNumbers, Set<OpiCategory> categories) {
 		this.name = name != null ? name : "blank";
 		this.city = city != null ? city : "blank";
 		this.delegateId = delegate != null ? delegate.getId() : 0L;
@@ -63,7 +64,7 @@ public class SchoolDTO implements DTO<SchoolModel> {
 
 	@Override
 	public SchoolModel toModel() {
-		DelegateModel delegate = new DelegateModel(delegateId);
+		UserModel delegate = UserFactory.createDelegateObject(delegateId);
 		Set<SchoolPhoneNumber> schoolPhoneNumbers = new HashSet<>();
 		for (String s : phoneNumbers) {
 		    schoolPhoneNumbers.add(new SchoolPhoneNumber(s));

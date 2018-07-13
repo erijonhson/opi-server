@@ -25,6 +25,7 @@ import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
 import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -39,7 +40,7 @@ public class AdminRest {
 	@PostMapping({ "/", "" })
 	@ApiOperation(value = "Create an Admin", notes = "Also returns a link to retrieve the saved admin in the location header")
 	public ResponseEntity<Object> createAdmin(@Valid @RequestBody AdminDTO admin) {
-		AdminModel savedAdmin = adminService.create(admin.toModel());
+		UserModel savedAdmin = adminService.create(admin.toModel());
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedAdmin.getId()).toUri();
@@ -87,11 +88,11 @@ public class AdminRest {
 	@PostMapping({ "/login/", "/login" })
 	@ApiOperation(value = "Login an Admin")
 	public ResponseEntity<AdminDTO> loginAdmin(@RequestBody AccountCredentials accountCredentials) {
-		AdminModel admin = adminService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
+		UserModel admin = adminService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
 		if (admin == null) {
 			return ResponseEntity.notFound().build();
 		}
-		AdminDTO adminDTO = admin.toDTO();
+		AdminDTO adminDTO = AdminDTO.toDTO(admin);
 		TokenAuthenticationService.addAuthentication(adminDTO, admin.getEmail());
 		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(adminDTO);
 	}
