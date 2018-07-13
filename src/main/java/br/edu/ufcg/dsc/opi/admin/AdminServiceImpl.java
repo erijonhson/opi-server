@@ -2,7 +2,6 @@ package br.edu.ufcg.dsc.opi.admin;
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,16 @@ import br.edu.ufcg.dsc.opi.util.user.UserService;
 public class AdminServiceImpl implements AdminService {
 
 	@Autowired(required = true)
-	private AdminRepository adminRepository;
-
-	@Autowired(required = true)
 	private UserService userService;
 
 	@Override
 	public UserDetails findByLogin(String login) {
-		return adminRepository.findByUserEmail(login); 
+		return userService.findByLogin(login); 
 	}
 
 	@Override
-	public AdminModel login(String login, String credentials) {
-		AdminModel admin = adminRepository.findByUserEmail(login);
+	public UserModel login(String login, String credentials) {
+		UserModel admin = userService.findByEmail(login);
 		if (admin != null && CryptoUtil.matches(credentials, admin.getPassword())) {
 			admin.setPassword(null);
 			return admin;
@@ -46,31 +42,26 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	@Transactional
-	public AdminModel create(AdminModel admin) {
+	public UserModel create(UserModel admin) {
 		admin.setRoles(EnumSet.of(Roles.ADMIN));
-		UserModel user = userService.create(admin.getUser());
-		admin.setUser(user);
-		return adminRepository.save(admin);
+		admin.setLocked(false);
+		admin.setEnabled(true);
+		return userService.create(admin);
 	}
 
 	@Override
 	public Collection<AdminDTO> indexByEmail(String adminEmail) {
-		Collection<AdminDTO> adminsDTO = new HashSet<>();
-		Collection<AdminModel> admins = adminRepository.findByUserEmailContaining(adminEmail);
-		for (AdminModel admin : admins) {
-			admin.setPassword(null);
-			adminsDTO.add(admin.toDTO());
-		}
-		return adminsDTO;
+		Collection<UserModel> admins = userService.findByEmailContaining(adminEmail);
+		return AdminDTO.toDTO(admins);
 	}
 
 	@Override
 	public AdminDTO showByEmail(String email) {
-		AdminModel adminModel = adminRepository.findByUserEmail(email);
+		UserModel adminModel = userService.findByEmail(email);
 		if (adminModel == null) {
 			return null;
 		}
-		return adminModel.toDTO();
+		return AdminDTO.toDTO(adminModel);
 	}
 
 	@Override

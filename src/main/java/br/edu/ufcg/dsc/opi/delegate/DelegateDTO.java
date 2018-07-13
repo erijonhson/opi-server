@@ -1,5 +1,7 @@
 package br.edu.ufcg.dsc.opi.delegate;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -9,11 +11,13 @@ import javax.validation.constraints.Size;
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "Delegate")
-public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
+public class DelegateDTO implements DTO<UserModel>, UserDTO {
 
 	@ApiModelProperty(example = "Rohit Gheyi")
 	@NotEmpty
@@ -52,8 +56,8 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	}
 
 	@Override
-	public DelegateModel toModel() {
-		return new DelegateModel(getName(), getEmail(), getPassword(), getRoles());
+	public UserModel toModel() {
+		return UserFactory.createDelegateObject(getName(), getEmail(), getPassword(), getRoles());
 	}
 
 	public String getName() {
@@ -91,6 +95,18 @@ public class DelegateDTO implements DTO<DelegateModel>, UserDTO {
 	@Override
 	public void setToken(String token) {
 		this.token= token;
+	}
+
+	public static DelegateDTO toDTO(UserModel user) {
+		return new DelegateDTO(user.getName(), user.getEmail(), null, user.getRoles());
+	}
+
+	public static Collection<DelegateDTO> toDTO(Collection<UserModel> users) {
+		Collection<DelegateDTO> delegatesDTO = new HashSet<>();
+		for (UserModel delegate : users) {
+			delegatesDTO.add(DelegateDTO.toDTO(delegate));
+		}
+		return delegatesDTO;
 	}
 
 }

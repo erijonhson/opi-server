@@ -5,10 +5,11 @@ import java.util.Collection;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.edu.ufcg.dsc.opi.security.UserService;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 
 public interface DelegateService extends UserService {
 
-	public DelegateModel create(DelegateModel delegate);
+	public UserModel create(UserModel delegate);
 
 	public Collection<DelegateDTO> indexByEmail(String email);
 

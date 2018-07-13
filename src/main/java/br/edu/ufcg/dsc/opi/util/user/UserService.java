@@ -1,5 +1,6 @@
 package br.edu.ufcg.dsc.opi.util.user;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,16 @@ public class UserService implements br.edu.ufcg.dsc.opi.security.UserService {
 		return userRepository.save(user);
 	}
 
-	public UserModel findByEmail(String login) {
-		return userRepository.findByEmail(login);
+	public UserModel findByEmailWithPassword(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	public UserModel findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	public Collection<UserModel> findByEmailContaining(String email) {
+		return userRepository.findByEmailContaining(email);
 	}
 
 	public boolean updateLocked(Long id, boolean status) {

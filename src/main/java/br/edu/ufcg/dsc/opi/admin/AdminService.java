@@ -5,10 +5,11 @@ import java.util.Set;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.UserService;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 
 public interface AdminService extends UserService {
 
-	public AdminModel create(AdminModel admin);
+	public UserModel create(UserModel admin);
 
 	public Collection<AdminDTO> indexByEmail(String adminEmail);
 

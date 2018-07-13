@@ -21,8 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import br.edu.ufcg.dsc.opi.delegate.DelegateModel;
 import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
+import br.edu.ufcg.dsc.opi.util.user.UserModel;
 
 /**
  * Partner school of the OPI.
@@ -52,8 +53,8 @@ public class SchoolModel implements Serializable {
 	private Set<SchoolPhoneNumber> schoolPhoneNumbers;
 
 	@ManyToOne //(fetch = FetchType.LAZY)
-	@JoinColumn(name = "delegate_id")
-	private DelegateModel delegate;
+	@JoinColumn(name = "user_id")
+	private UserModel delegate;
 
 	@ElementCollection(targetClass = OpiCategory.class)
 	@CollectionTable(name = "tb_opi_category", joinColumns = @JoinColumn(name = "school_id"))
@@ -62,10 +63,10 @@ public class SchoolModel implements Serializable {
 	private Set<OpiCategory> categories;
 
 	public SchoolModel() {
-		this("blank", "blank", new HashSet<>(), new DelegateModel(), new HashSet<>());
+		this("blank", "blank", new HashSet<>(), UserFactory.createDelegateObject(), new HashSet<>());
 	}
 
-	public SchoolModel(String name, String city, Set<SchoolPhoneNumber> schoolPhoneNumbers, DelegateModel delegate, Set<OpiCategory> categories) {
+	public SchoolModel(String name, String city, Set<SchoolPhoneNumber> schoolPhoneNumbers, UserModel delegate, Set<OpiCategory> categories) {
 		this.name = name;
 		this.city = city;
 		this.schoolPhoneNumbers = schoolPhoneNumbers;
@@ -97,11 +98,11 @@ public class SchoolModel implements Serializable {
 		this.city = city;
 	}
 
-	public DelegateModel getDelegate() {
+	public UserModel getDelegate() {
 		return delegate;
 	}
 
-	public void setDelegate(DelegateModel delegate) {
+	public void setDelegate(UserModel delegate) {
 		this.delegate = delegate;
 	}
 
