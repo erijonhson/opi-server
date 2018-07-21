@@ -8,8 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.edu.ufcg.dsc.opi.security.Roles;
-import br.edu.ufcg.dsc.opi.security.UserDTO;
 import br.edu.ufcg.dsc.opi.util.DTO;
 import br.edu.ufcg.dsc.opi.util.user.UserFactory;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
@@ -17,7 +18,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "Delegate")
-public class DelegateDTO implements DTO<UserModel>, UserDTO {
+public class DelegateDTO implements DTO<UserModel> {
 
 	@ApiModelProperty(example = "Rohit Gheyi")
 	@NotEmpty
@@ -36,7 +37,8 @@ public class DelegateDTO implements DTO<UserModel>, UserDTO {
 	@ApiModelProperty(example = "DELEGATE")
 	private Set<Roles> roles;
 
-	@ApiModelProperty(name = "token", example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE1MzAyODcyNzV9.orNXJJBUYC0Orcm-zMJULaPlcnwB9Iw7UwM532XVEYhclH624MzI32zKDIRTKHEYwtOPg_OJMQyin4itxs9MjA")
+	@ApiModelProperty(hidden = true)
+	@JsonIgnore
 	private String token;
 
 	public DelegateDTO() {
@@ -92,9 +94,8 @@ public class DelegateDTO implements DTO<UserModel>, UserDTO {
 		return token;
 	}
 
-	@Override
 	public void setToken(String token) {
-		this.token= token;
+		this.token = token;
 	}
 
 	public static DelegateDTO toDTO(UserModel user) {

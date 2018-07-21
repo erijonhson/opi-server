@@ -7,6 +7,8 @@ package br.edu.ufcg.dsc.opi.security;
  */
 public enum Roles {
 	ADMIN,
+	DELEGATE,
 	COLLABORATOR,
-	DELEGATE
+	COMPETITOR,
+	STUDENT
 }

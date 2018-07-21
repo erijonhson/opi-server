@@ -4,11 +4,13 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufcg.dsc.opi.security.Payload;
 import br.edu.ufcg.dsc.opi.security.Roles;
+import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.CryptoUtil;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import br.edu.ufcg.dsc.opi.util.user.UserService;
 
@@ -24,11 +26,15 @@ public class DelegateServiceImpl implements DelegateService {
 	private UserService userService;
 
 	@Override
-	public UserModel login(String login, String credentials) {
+	public DelegateDTO login(String login, String credentials) {
 		UserModel delegate = userService.findByEmail(login);
 		if (delegate != null && CryptoUtil.matches(credentials, delegate.getPassword())) {
 			delegate.setPassword(null);
-			return delegate;
+			Payload payload = UserFactory.createPayload(delegate);
+			String token = TokenAuthenticationService.generateToken(payload);
+			DelegateDTO delegateDTO = DelegateDTO.toDTO(delegate);
+			delegateDTO.setToken(token);
+			return delegateDTO;
 		}
 		return null;
 	}
@@ -49,11 +55,6 @@ public class DelegateServiceImpl implements DelegateService {
 			return null;
 		}
 		return DelegateDTO.toDTO(delegate);
-	}
-
-	@Override
-	public UserDetails findByLogin(String login) {
-		return userService.findByLogin(login);
 	}
 
 }

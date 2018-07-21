@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.google.common.collect.ImmutableMap;
+
 import br.edu.ufcg.dsc.opi.security.AccountCredentials;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
-import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiOperation;
@@ -54,13 +55,17 @@ public class DelegateRest {
 	@PostMapping({ "/login/", "/login" })
 	@ApiOperation(value = "Login a Delegate")
 	public ResponseEntity<DelegateDTO> loginDelegate(@RequestBody AccountCredentials accountCredentials) {
-		UserModel delegate = delegateService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
-		if (delegate == null) {
+		DelegateDTO delegateDTO = delegateService.login(
+				accountCredentials.getUsername(),
+				accountCredentials.getPassword());
+
+		if (delegateDTO == null) {
 			return ResponseEntity.notFound().build();
 		}
-		DelegateDTO delegateDTO = DelegateDTO.toDTO(delegate);
-		TokenAuthenticationService.addAuthentication(delegateDTO, delegate.getEmail());
-		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(delegateDTO);
+
+		return ResponseEntity.ok()
+				.headers(SecurityUtils.fillAccessControlHeader(ImmutableMap.of(SecurityUtils.TOKEN_HEADER, delegateDTO.getToken())))
+				.body(delegateDTO);
 	}
 
 }

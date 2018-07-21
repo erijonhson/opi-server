@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import br.edu.ufcg.dsc.opi.util.JSonUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -23,37 +23,21 @@ public class TokenAuthenticationService {
 	protected static final String HEADER_REFRESH = "Refresh-Token";
 
 	/**
-	 * Adds the authentication in the response.
-	 *
-	 * @param response
-	 *            Response.
-	 * @param username
-	 *            Username.
-	 */
-	public static void addAuthentication(UserDTO dto, String username) {
-
-		String jwt = Jwts.builder().setSubject(username)
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TOKEN))
-				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
-
-		dto.setToken(jwt);
-	}
-
-	/**
 	 * Gets the authentication.
 	 *
 	 * @param request
 	 *            Request.
 	 * @return Authentication.
 	 */
-	static Authentication getAuthentication(HttpServletRequest request) {
+	static Authentication getAuthentication(final HttpServletRequest request) {
 
 		String token = request.getHeader(HEADER);
 		if (token != null) {
 			String user = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token.replace(TOKEN_PREFIX, "").trim())
 					.getBody().getSubject();
-			UserDetails userDetails = SecurityUtils.getUserService().findByLogin(user);
+			Payload userDetails = JSonUtil.fromJSon(user, Payload.class);
 			if (userDetails != null && userDetails.isAccountNonLocked() && userDetails.isEnabled()) {
+				// User(userDetails.getUsername(), null, userDetails.isEnabled(), userDetails.isAccountNonExpired(), userDetails.isCredentialsNonExpired(), userDetails.isAccountNonLocked(), userDetails.getAuthorities());
 				return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
 			} else {
 				return null;
@@ -64,13 +48,12 @@ public class TokenAuthenticationService {
 
 	/**
 	 * Generate Token.
-	 *
-	 * @param username
-	 *            Username.
-	 * @return Token.
+	 * 
+	 * @param payload
+	 * @return token
 	 */
-	public static String generateToken(String username) {
-		return Jwts.builder().setSubject(username)
+	public static final String generateToken(final Payload payload) {
+		return Jwts.builder().setSubject(JSonUtil.toJSon(payload))
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TOKEN))
 				.signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
 	}
