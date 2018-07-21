@@ -6,9 +6,9 @@ package br.edu.ufcg.dsc.opi.security;
  * @author Eri Jonhson
  */
 public enum Roles {
-	ADMIN,
-	DELEGATE,
-	COLLABORATOR,
-	COMPETITOR,
-	STUDENT
+	ROLE_ADMIN,
+	ROLE_DELEGATE,
+	ROLE_COLLABORATOR,
+	ROLE_COMPETITOR,
+	ROLE_STUDENT
 }

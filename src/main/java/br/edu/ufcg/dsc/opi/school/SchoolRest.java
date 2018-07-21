@@ -31,7 +31,7 @@ public class SchoolRest {
 	 * @param school to be register
 	 * @return status
 	 */
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'DELEGATE')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'DELEGATE')")
 	@PostMapping({ "/", "" })
 	@ApiOperation(
 		value = "Create a School", 
@@ -45,7 +45,7 @@ public class SchoolRest {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Index Schools")
 	public Collection<SchoolDTO> indexSchool() {

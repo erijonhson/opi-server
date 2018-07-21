@@ -60,7 +60,7 @@ public class UserModel implements Serializable, UserDetails {
 	private String password;
 
 	@ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
-	@CollectionTable(name = "tb_roles", joinColumns = @JoinColumn(name = "user_id"))
+	@CollectionTable(name = "tb_role", joinColumns = @JoinColumn(name = "user_id"))
 	@Column(name = "name", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Set<Roles> roles;

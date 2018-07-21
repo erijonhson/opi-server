@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	@Transactional
 	public UserModel create(UserModel admin) {
-		admin.setRoles(EnumSet.of(Roles.ADMIN));
+		admin.setRoles(EnumSet.of(Roles.ROLE_ADMIN));
 		admin.setLocked(false);
 		admin.setEnabled(true);
 		return userService.create(admin);
@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean changingLocking(String userEmail, boolean status) {
 		UserModel user = userService.findByEmail(userEmail);
-		if (user != null && !user.getRoles().contains(Roles.ADMIN)) {
+		if (user != null && !user.getRoles().contains(Roles.ROLE_ADMIN)) {
 			return userService.updateLocked(user.getId(), status);
 		}
 		return false;
@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean changingEnabling(String userEmail, boolean status) {
 		UserModel user = userService.findByEmail(userEmail);
-		if (user != null && !user.getRoles().contains(Roles.ADMIN)) {
+		if (user != null && !user.getRoles().contains(Roles.ROLE_ADMIN)) {
 			return userService.updateEnable(user.getId(), status);
 		}
 		return false;
@@ -86,7 +86,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public boolean changingRoles(String userEmail, Set<Roles> roles) {
 		UserModel user = userService.findByEmail(userEmail);
-		if (user != null && !user.getRoles().contains(Roles.ADMIN)) {
+		if (user != null && !user.getRoles().contains(Roles.ROLE_ADMIN)) {
 			return userService.updateRoles(user.getId(), roles);
 		}
 		return false;

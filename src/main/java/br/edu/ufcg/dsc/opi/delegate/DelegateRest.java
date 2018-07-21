@@ -45,7 +45,7 @@ public class DelegateRest {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Finds a Delegate by e-mail")
 	public Collection<DelegateDTO> indexDelegateByEmail(@Size(min = 5, max = 256) @RequestParam String email) {
