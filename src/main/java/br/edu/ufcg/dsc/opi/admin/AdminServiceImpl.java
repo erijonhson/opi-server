@@ -5,12 +5,14 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.edu.ufcg.dsc.opi.security.Payload;
 import br.edu.ufcg.dsc.opi.security.Roles;
+import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.CryptoUtil;
+import br.edu.ufcg.dsc.opi.util.user.UserFactory;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import br.edu.ufcg.dsc.opi.util.user.UserService;
 
@@ -26,16 +28,15 @@ public class AdminServiceImpl implements AdminService {
 	private UserService userService;
 
 	@Override
-	public UserDetails findByLogin(String login) {
-		return userService.findByLogin(login); 
-	}
-
-	@Override
-	public UserModel login(String login, String credentials) {
+	public AdminDTO login(String login, String credentials) {
 		UserModel admin = userService.findByEmail(login);
 		if (admin != null && CryptoUtil.matches(credentials, admin.getPassword())) {
 			admin.setPassword(null);
-			return admin;
+			Payload payload = UserFactory.createPayload(admin);
+			String token = TokenAuthenticationService.generateToken(payload);
+			AdminDTO adminDTO = AdminDTO.toDTO(admin);
+			adminDTO.setToken(token);
+			return adminDTO;
 		}
 		return null;
 	}

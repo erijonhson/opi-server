@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
@@ -16,12 +15,11 @@ import br.edu.ufcg.dsc.opi.util.CryptoUtil;
  * @author Eri Jonhson
  */
 @Service(value = "userService")
-public class UserService implements br.edu.ufcg.dsc.opi.security.UserService {
+public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
-	@Override
 	public UserModel login(String login, String credentials) {
 		UserModel user = userRepository.findByEmail(login);
 		if (user != null && CryptoUtil.matches(credentials, user.getPassword())) {
@@ -78,11 +76,6 @@ public class UserService implements br.edu.ufcg.dsc.opi.security.UserService {
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public UserDetails findByLogin(String login) {
-		return userRepository.findByEmail(login);
 	}
 
 }

@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.google.common.collect.ImmutableMap;
+
 import br.edu.ufcg.dsc.opi.security.AccountCredentials;
 import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
-import br.edu.ufcg.dsc.opi.security.TokenAuthenticationService;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
 import io.swagger.annotations.ApiOperation;
@@ -88,13 +89,17 @@ public class AdminRest {
 	@PostMapping({ "/login/", "/login" })
 	@ApiOperation(value = "Login an Admin")
 	public ResponseEntity<AdminDTO> loginAdmin(@RequestBody AccountCredentials accountCredentials) {
-		UserModel admin = adminService.login(accountCredentials.getUsername(), accountCredentials.getPassword());
-		if (admin == null) {
+		AdminDTO adminDTO = adminService.login(
+				accountCredentials.getUsername(),
+				accountCredentials.getPassword());
+
+		if (adminDTO == null) {
 			return ResponseEntity.notFound().build();
 		}
-		AdminDTO adminDTO = AdminDTO.toDTO(admin);
-		TokenAuthenticationService.addAuthentication(adminDTO, admin.getEmail());
-		return ResponseEntity.ok().headers(SecurityUtils.fillAccessControlHeader()).body(adminDTO);
+
+		return ResponseEntity.ok()
+				.headers(SecurityUtils.fillAccessControlHeader(ImmutableMap.of(SecurityUtils.TOKEN_HEADER, adminDTO.getToken())))
+				.body(adminDTO);
 	}
 
 }

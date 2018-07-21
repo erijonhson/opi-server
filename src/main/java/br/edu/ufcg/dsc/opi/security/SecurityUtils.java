@@ -1,17 +1,18 @@
 package br.edu.ufcg.dsc.opi.security;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
-
-import br.edu.ufcg.dsc.opi.ApplicationContextHolder;
 
 /**
  * Utils for Security.
  */
 public class SecurityUtils {
 
-	private static UserService userService;
+	public static final String TOKEN_HEADER = "authorization";
 
 	/**
 	 * Fills the Header with the Access Control.
@@ -43,13 +44,29 @@ public class SecurityUtils {
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, DELETE, PUT, PATCH");
 		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "x-requested-with, authorization, content-type, refresh-token, user");
 		headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "authorization, content-type, refresh-token, user");
+
 		return headers;
 	}
 
-	protected static UserService getUserService() {
-		if (userService == null) {
-			userService = ApplicationContextHolder.getBean("userService", UserService.class);
+	/**
+	 * Get Headers with the Access Control.
+	 * 
+	 * @return HttpHeaders
+	 */
+	public static HttpHeaders fillAccessControlHeader(Map<String, String> customHeaders) {
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, DELETE, PUT, PATCH");
+		headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "x-requested-with, authorization, content-type, refresh-token, user");
+		headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "authorization, content-type, refresh-token, user");
+
+		for (Entry<String, String> custom : customHeaders.entrySet()) {
+			headers.add(custom.getKey(), custom.getValue());
 		}
-		return userService;
+
+		return headers;
 	}
+
 }

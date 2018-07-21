@@ -4,10 +4,11 @@ import java.util.Collection;
 import java.util.Set;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
-import br.edu.ufcg.dsc.opi.security.UserService;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
 
-public interface AdminService extends UserService {
+public interface AdminService {
+
+	public AdminDTO login(String login, String credentials);
 
 	public UserModel create(UserModel admin);
 
