@@ -37,7 +37,7 @@ public class AdminRest {
 	@Autowired
 	private AdminServiceImpl adminService;
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping({ "/", "" })
 	@ApiOperation(value = "Create an Admin", notes = "Also returns a link to retrieve the saved admin in the location header")
 	public ResponseEntity<Object> createAdmin(@Valid @RequestBody AdminDTO admin) {
@@ -49,14 +49,14 @@ public class AdminRest {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/", "" })
 	@ApiOperation(value = "Finds an Admin by e-mail")
 	public Collection<AdminDTO> indexAdminByEmail(@Size(min = 5, max = 256) @RequestParam String email) {
 		return adminService.indexByEmail(email);
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/locking/", "/locking" })
 	@ApiOperation(value = "Manipulate locking of an user account")
 	public ResponseEntity<Object> changingLocking(@Size(min = 5, max = 256) @Email @RequestParam String userEmail, @RequestParam boolean status) {
@@ -66,7 +66,7 @@ public class AdminRest {
 		return ResponseEntity.badRequest().build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/enabling/", "/enabling" })
 	@ApiOperation(value = "Manipulate enabling of an user account")
 	public ResponseEntity<Object> changingEnabling(@Size(min = 5, max = 256) @Email @RequestParam String userEmail, @RequestParam boolean status) {
@@ -76,7 +76,7 @@ public class AdminRest {
 		return ResponseEntity.badRequest().build();
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping({ "/roles/", "/roles" })
 	@ApiOperation(value = "Manipulate roles of an user account")
 	public ResponseEntity<Object> changingRoles(@Size(min = 5, max = 256) @Email @RequestParam String userEmail, @RequestParam Set<Roles> roles) {

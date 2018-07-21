@@ -34,7 +34,7 @@ public class AdminDTO implements DTO<UserModel> {
 	@NotEmpty
 	private String password;
 
-	@ApiModelProperty(example = "ADMIN")
+	@ApiModelProperty(example = "[ROLE_ADMIN]")
 	private Set<Roles> roles;
 
 	@ApiModelProperty(hidden = true)

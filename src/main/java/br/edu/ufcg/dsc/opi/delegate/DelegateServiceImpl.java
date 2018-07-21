@@ -40,7 +40,7 @@ public class DelegateServiceImpl implements DelegateService {
 	}
 
 	public UserModel create(UserModel delegate) {
-		delegate.setRoles(EnumSet.of(Roles.DELEGATE));
+		delegate.setRoles(EnumSet.of(Roles.ROLE_DELEGATE));
 		return userService.create(delegate);
 	}
 

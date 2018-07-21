@@ -34,7 +34,7 @@ public class DelegateDTO implements DTO<UserModel> {
 	@NotEmpty
 	private String password;
 
-	@ApiModelProperty(example = "DELEGATE")
+	@ApiModelProperty(example = "[ROLE_DELEGATE]")
 	private Set<Roles> roles;
 
 	@ApiModelProperty(hidden = true)
