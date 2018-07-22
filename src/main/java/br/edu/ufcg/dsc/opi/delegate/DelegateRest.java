@@ -24,11 +24,13 @@ import br.edu.ufcg.dsc.opi.security.AccountCredentials;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = RestConstants.DELEGATE_URI)
 @Validated
+@Api(tags = "Delegates")
 public class DelegateRest {
 
 	@Autowired

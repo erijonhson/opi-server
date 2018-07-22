@@ -23,7 +23,6 @@ import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import br.edu.ufcg.dsc.opi.security.Roles;
 import springfox.documentation.annotations.ApiIgnore;
@@ -37,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Entity
 @Table(name = "tb_user")
 @EntityListeners(UserModelListener.class)
-public class UserModel implements Serializable, UserDetails {
+public class UserModel implements Serializable, User {
 
 	private static final long serialVersionUID = -2449991389290724038L;
 
@@ -143,33 +142,6 @@ public class UserModel implements Serializable, UserDetails {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof UserModel))
-			return false;
-		UserModel userModel = (UserModel) obj;
-		if (email == null) {
-			if (userModel.email != null)
-				return false;
-		} else if (!email.equals(userModel.email))
-			return false;
-		if (name == null) {
-			if (userModel.name != null)
-				return false;
-		} else if (!name.equals(userModel.name))
-			return false;
-		return true;
-	}
-
-	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		String[] roles = new String[this.roles.size()];
 		int index = 0;
@@ -202,6 +174,36 @@ public class UserModel implements Serializable, UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserModel other = (UserModel) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return email;
 	}
 
 }

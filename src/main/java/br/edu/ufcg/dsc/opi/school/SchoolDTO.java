@@ -15,19 +15,19 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value="School")
 public class SchoolDTO implements DTO<SchoolModel> {
 
-	@ApiModelProperty(example = "Universidade Federal de Campina Grande")
+	@ApiModelProperty(example = "Universidade Federal de Campina Grande", required = true)
 	@NotEmpty(message = "Colégio deve ter um nome")
 	private String name;
 
-	@ApiModelProperty(example = "Campina Grande")
+	@ApiModelProperty(example = "Campina Grande", required = true)
 	@NotEmpty(message = "Colégio deve ter uma cidade")
 	private String city;
 
-	@ApiModelProperty(example = "['+55 83 3310 1122', '+55 83 3310 1027', '+55 83 3310 1124']")
+	@ApiModelProperty(example = "['+55 83 3310 1122', '+55 83 3310 1027', '+55 83 3310 1124']", required = true)
 	@NotEmpty(message = "Colégio deve ter ao menos um número para contato")
 	private Set<String> phoneNumbers;
 
-	@ApiModelProperty(example = "1")
+	@ApiModelProperty(example = "1", required = true)
 	private Long delegateId;
 
 	@ApiModelProperty(

@@ -26,12 +26,12 @@ public class DelegateServiceImpl implements DelegateService {
 	private UserService userService;
 
 	@Override
-	public DelegateDTO login(String login, String credentials) {
+	public DelegateDTO login(final String login, final String credentials) {
 		UserModel delegate = userService.findByEmail(login);
 		if (delegate != null && CryptoUtil.matches(credentials, delegate.getPassword())) {
 			delegate.setPassword(null);
 			Payload payload = UserFactory.createPayload(delegate);
-			String token = TokenAuthenticationService.generateToken(payload);
+			final String token = TokenAuthenticationService.generateToken(payload);
 			DelegateDTO delegateDTO = DelegateDTO.toDTO(delegate);
 			delegateDTO.setToken(token);
 			return delegateDTO;
@@ -44,17 +44,26 @@ public class DelegateServiceImpl implements DelegateService {
 		return userService.create(delegate);
 	}
 
-	public Collection<DelegateDTO> indexByEmail(String email) {
+	public Collection<DelegateDTO> indexByEmail(final String email) {
 		Collection<UserModel> delegates = userService.findByEmailContaining(email);
 		return DelegateDTO.toDTO(delegates);
 	}
 
-	public DelegateDTO showByEmail(String email) {
+	public DelegateDTO showByEmail(final String email) {
 		UserModel delegate = userService.findByEmail(email);
 		if (delegate == null) {
 			return null;
 		}
 		return DelegateDTO.toDTO(delegate);
+	}
+
+	@Override
+	public boolean checkIfDelegate(final Long delegateId) {
+		final UserModel delegate = userService.findById(delegateId);
+		if (delegate.getRoles().contains(Roles.ROLE_DELEGATE))
+			return true;
+		else
+			return false;
 	}
 
 }

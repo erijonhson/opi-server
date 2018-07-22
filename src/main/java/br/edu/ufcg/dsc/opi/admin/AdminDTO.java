@@ -20,17 +20,17 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Admin")
 public class AdminDTO implements DTO<UserModel> {
 
-	@ApiModelProperty(example = "Rohit Gheyi")
+	@ApiModelProperty(example = "Rohit Gheyi", required = true)
 	@NotEmpty
 	@Size(min = 3, max = 256, message = "Nome deve ter entre 3 e 256 caracteres")
 	private String name;
 
-	@ApiModelProperty(example = "rohit@rohit.com")
+	@ApiModelProperty(example = "rohit@rohit.com", required = true)
 	@NotEmpty
 	@Email
 	private String email;
 
-	@ApiModelProperty(example = "abcde")
+	@ApiModelProperty(example = "abcde", required = true)
 	@NotEmpty
 	private String password;
 
