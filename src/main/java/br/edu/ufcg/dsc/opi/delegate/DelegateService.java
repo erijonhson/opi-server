@@ -14,4 +14,6 @@ public interface DelegateService {
 
 	public DelegateDTO showByEmail(String email);
 
+	public boolean checkIfDelegate(Long delegateId);
+
 }

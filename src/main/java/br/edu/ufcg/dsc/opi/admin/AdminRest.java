@@ -27,11 +27,13 @@ import br.edu.ufcg.dsc.opi.security.Roles;
 import br.edu.ufcg.dsc.opi.security.SecurityUtils;
 import br.edu.ufcg.dsc.opi.util.RestConstants;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = RestConstants.ADMIN_URI)
 @Validated
+@Api(tags = "Admins")
 public class AdminRest {
 
 	@Autowired

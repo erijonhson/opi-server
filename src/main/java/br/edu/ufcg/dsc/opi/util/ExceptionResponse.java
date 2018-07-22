@@ -1,21 +1,21 @@
 package br.edu.ufcg.dsc.opi.util;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class ExceptionResponse {
 
-	private Date timestamp;
+	private Instant timestamp;
 	private String message;
 	private String details;
 
-	public ExceptionResponse(Date timestamp, String message, String details) {
+	public ExceptionResponse(Instant timestamp, String message, String details) {
 		super();
 		this.timestamp = timestamp;
 		this.message = message;
 		this.details = details;
 	}
 
-	public Date getTimestamp() {
+	public Instant getTimestamp() {
 		return timestamp;
 	}
 

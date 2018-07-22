@@ -1,8 +1,9 @@
 package br.edu.ufcg.dsc.opi;
 
-import java.util.Date;
+import java.time.Instant;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.edu.ufcg.dsc.opi.security.DisabledAccountRuntimeException;
+import br.edu.ufcg.dsc.opi.security.LockedAccountRuntimeException;
 import br.edu.ufcg.dsc.opi.util.ExceptionResponse;
 
 /**
@@ -44,58 +47,91 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 	 * @param request
 	 * @return ExceptionResponse
 	 */
+	//@formatter:off
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public final ExceptionResponse handleAllExceptions(Exception exception, WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
-				request.getDescription(false));
+	public final ExceptionResponse handleAllExceptions(
+			Exception exception,
+			WebRequest request) {
+		ExceptionResponse exceptionResponse = 
+				new ExceptionResponse(
+						Instant.now(),
+						exception.getMessage(),
+						request.getDescription(false));
 		return exceptionResponse;
 	}
+	//@formatter:on
 
 	/**
-	 * Handle all validate problems.
+	 * Handle all validation problems.
 	 * 
 	 * @see {@link ResponseEntityExceptionHandler}
 	 */
+	//@formatter:off
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Failed",
-				ex.getBindingResult().toString());
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex,
+			HttpHeaders headers,
+			HttpStatus status,
+			WebRequest request) {
+		ExceptionResponse exceptionResponse = 
+				new ExceptionResponse(
+						Instant.now(),
+						"Validation Failed",
+						ex.getBindingResult().toString());
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.CONFLICT);
 	}
+	//@formatter:on
 
 	/**
-	 * Captures Constraint Violations in validations and sends error occurred with
-	 * status Bad Request (HTTP 400).
+	 * Captures Validation Exceptions and sends error occurred with status Bad
+	 * Request (HTTP 400).
 	 * 
 	 * @param exception
 	 * @param request
 	 * @return ExceptionResponse
 	 */
+	//@formatter:off
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(ConstraintViolationException.class)
-	public final ExceptionResponse handleConstraintViolationException(ConstraintViolationException exception,
+	@ExceptionHandler({
+		ValidationException.class,
+		ConstraintViolationException.class
+	})
+	public final ExceptionResponse handleValidationException(
+			ValidationException exception,
 			WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
-				request.getDescription(false));
+		ExceptionResponse exceptionResponse = 
+				new ExceptionResponse(
+						Instant.now(),
+						exception.getMessage(),
+						request.getDescription(false));
 		return exceptionResponse;
 	}
+	//@formatter:on
 
 	/**
-	 * Captures Constraint Violations in validations and sends error occurred with
-	 * status Bad Request (HTTP 400).
+	 * Captures Access Denied violations or Account problems and sends error
+	 * occurred with status Forbidden (HTTP 403).
 	 * 
 	 * @param exception
 	 * @param request
-	 * @return ExceptionResponse
+	 * @return
 	 */
+	//@formatter:off
 	@ResponseStatus(HttpStatus.FORBIDDEN)
-	@ExceptionHandler(AccessDeniedException.class)
-	public final ExceptionResponse handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
-				request.getDescription(false));
+	@ExceptionHandler({
+		AccessDeniedException.class,
+		DisabledAccountRuntimeException.class,
+		LockedAccountRuntimeException.class
+	})
+	public final ExceptionResponse handleAccessDeniedException(Exception exception, WebRequest request) {
+		ExceptionResponse exceptionResponse = 
+				new ExceptionResponse(
+						Instant.now(),
+						exception.getMessage(),
+						request.getDescription(false));
 		return exceptionResponse;
 	}
+	//@formatter:on
 
 }

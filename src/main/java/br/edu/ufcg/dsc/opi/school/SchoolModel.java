@@ -78,6 +78,11 @@ public class SchoolModel implements Serializable {
 		}
 	}
 
+	public SchoolModel(Long id) {
+		this();
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

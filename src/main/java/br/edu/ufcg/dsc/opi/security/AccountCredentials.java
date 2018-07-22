@@ -11,11 +11,11 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "AccountCredentials")
 public class AccountCredentials {
 
-	@ApiModelProperty(example = "admin@admin.com")
+	@ApiModelProperty(example = "admin@admin.com", required = true)
 	@NotEmpty
     private String username;
 
-	@ApiModelProperty(example = "abcde")
+	@ApiModelProperty(example = "abcde", required = true)
 	@NotEmpty
     private String password;
 

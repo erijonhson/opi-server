@@ -1,8 +1,12 @@
 package br.edu.ufcg.dsc.opi.util.user;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
+import br.edu.ufcg.dsc.opi.school.SchoolModel;
+import br.edu.ufcg.dsc.opi.school.student.StudentModel;
 import br.edu.ufcg.dsc.opi.security.Payload;
 import br.edu.ufcg.dsc.opi.security.Roles;
 
@@ -11,6 +15,9 @@ import br.edu.ufcg.dsc.opi.security.Roles;
  * @author Eri Jonhson
  */
 public class UserFactory {
+
+	private UserFactory() {
+	}
 
 	// Security
 
@@ -62,4 +69,28 @@ public class UserFactory {
 		return delegateUser;
 	}
 
+	// Student
+
+	// @formatter:off
+
+	public static StudentModel createSchoolStudenteObject(String name, String email, String password, 
+			String alias, Date dateOfBirth, Gender gender, Long schoolId) {
+		UserModel user = new UserModel(name, email, password, EnumSet.of(Roles.ROLE_SCHOOL_STUDENT));
+		SchoolModel school = new SchoolModel(schoolId);
+		StudentModel schoolStudentUser = new StudentModel(user, alias, dateOfBirth, gender, school);
+		return schoolStudentUser;
+	}
+
+	public static StudentModel createSchoolStudenteObject(String name, String email, String password, Set<Roles> roles, 
+			String alias, Instant dateOfBirth, Gender gender, Long schoolId) {
+		UserModel user = new UserModel(name, email, password, roles);
+		SchoolModel school = new SchoolModel(schoolId);
+		StudentModel schoolStudentUser = new StudentModel(user, alias, new Date(dateOfBirth.toEpochMilli()), gender, school);
+		return schoolStudentUser;
+	}
+	// @formatter:on
+
+	public static UserModel createUserNullObject() {
+		return new UserModel();
+	}
 }
