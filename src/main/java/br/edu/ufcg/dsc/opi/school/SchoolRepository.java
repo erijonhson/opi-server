@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * 
  * @author Eri Jonhson
  */
-@Repository(value = "SchoolRepository")
+@Repository(value = "schoolRepository")
 interface SchoolRepository extends JpaRepository<SchoolModel, Long> {
 
 }

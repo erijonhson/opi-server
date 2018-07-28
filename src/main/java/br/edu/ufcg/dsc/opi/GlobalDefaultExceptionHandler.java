@@ -6,6 +6,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import br.edu.ufcg.dsc.opi.security.DisabledAccountRuntimeException;
 import br.edu.ufcg.dsc.opi.security.LockedAccountRuntimeException;
 import br.edu.ufcg.dsc.opi.util.ExceptionResponse;
+import br.edu.ufcg.dsc.opi.util.NotFoundRuntimeException;
 
 /**
  * Captures system exceptions in the context of the Dispatcher Servlet. That is,
@@ -94,11 +96,12 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 	//@formatter:off
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({
-		ValidationException.class,
-		ConstraintViolationException.class
+		ConstraintViolationException.class,
+		DataIntegrityViolationException.class,
+		ValidationException.class
 	})
 	public final ExceptionResponse handleValidationException(
-			ValidationException exception,
+			Exception exception,
 			WebRequest request) {
 		ExceptionResponse exceptionResponse = 
 				new ExceptionResponse(
@@ -118,13 +121,40 @@ public class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandle
 	 * @return
 	 */
 	//@formatter:off
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler({
 		AccessDeniedException.class,
 		DisabledAccountRuntimeException.class,
 		LockedAccountRuntimeException.class
 	})
-	public final ExceptionResponse handleAccessDeniedException(Exception exception, WebRequest request) {
+	public final ExceptionResponse handleAccessDeniedException(
+			Exception exception, 
+			WebRequest request) {
+		ExceptionResponse exceptionResponse = 
+				new ExceptionResponse(
+						Instant.now(),
+						exception.getMessage(),
+						request.getDescription(false));
+		return exceptionResponse;
+	}
+	//@formatter:on
+
+	/**
+	 * Captures Not Found Resource Exception and sends error occurred with status
+	 * Not Found (HTTP 404).
+	 * 
+	 * @param exception
+	 * @param request
+	 * @return
+	 */
+	//@formatter:off
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler({
+		NotFoundRuntimeException.class,
+	})
+	public final ExceptionResponse handleNotFoundRuntimeException(
+			Exception exception, 
+			WebRequest request) {
 		ExceptionResponse exceptionResponse = 
 				new ExceptionResponse(
 						Instant.now(),

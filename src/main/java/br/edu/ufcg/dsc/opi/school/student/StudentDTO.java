@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -51,6 +52,7 @@ public class StudentDTO implements DTO<StudentModel> {
 	private String alias;
 
 	@ApiModelProperty(example = "1990-02-30T00:00:00.00Z", required = true)
+	@Past
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	private Instant dateOfBirth;
 

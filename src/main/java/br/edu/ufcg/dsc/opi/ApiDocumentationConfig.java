@@ -26,6 +26,6 @@ import io.swagger.annotations.SwaggerDefinition;
 		schemes = { SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS },
 		externalDocs = @ExternalDocs(value = "Read This", url = "https://github.com/erijonhson/opi-server")
 )
-public class ApiDocumentatioConfig {
+public class ApiDocumentationConfig {
 
 }
