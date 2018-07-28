@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -56,6 +57,7 @@ public class StudentModel implements Serializable, User {
 	@Column(name = "alias")
 	private String alias;
 
+	@Past
 	@Column(name = "date_of_birth")
 	private Date dateOfBirth;
 

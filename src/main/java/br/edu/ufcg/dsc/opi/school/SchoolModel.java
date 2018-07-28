@@ -24,12 +24,14 @@ import javax.validation.constraints.NotEmpty;
 import br.edu.ufcg.dsc.opi.olympiad.OpiCategory;
 import br.edu.ufcg.dsc.opi.util.user.UserFactory;
 import br.edu.ufcg.dsc.opi.util.user.UserModel;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Partner school of the OPI.
  * 
  * @author Eri Jonhson
  */
+@ApiIgnore
 @Entity
 @Table(name = "tb_school")
 public class SchoolModel implements Serializable {

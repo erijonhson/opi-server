@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 public class AdminRest {
 
 	@Autowired
-	private AdminServiceImpl adminService;
+	private AdminService adminService;
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping({ "/", "" })
