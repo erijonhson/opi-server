@@ -80,6 +80,11 @@ public class StudentModel implements Serializable, User {
 		this.school = school;
 	}
 
+	public StudentModel(Long id) {
+		this();
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}
