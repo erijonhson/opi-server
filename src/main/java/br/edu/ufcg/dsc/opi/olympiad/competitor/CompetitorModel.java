@@ -47,6 +47,10 @@ public class CompetitorModel implements Serializable {
 	@Column(name = "mark_level_two")
 	private Integer markLevelTwo = -1;
 
+	public CompetitorModel() {
+		this(new StudentModel(), null, -1, -1);
+	}
+
 	public CompetitorModel(StudentModel student, Grades grade, int markLevelOne, int markLevelTwo) {
 		this.student = student;
 		this.grade = grade;

@@ -5,8 +5,8 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufcg.dsc.opi.school.student.StudentModel;
 import br.edu.ufcg.dsc.opi.school.student.StudentService;
+import br.edu.ufcg.dsc.opi.util.NotFoundRuntimeException;
 
 @Service(value = "competitorService")
 public class CompetitorServiceImpl implements CompetitorService {
@@ -19,8 +19,6 @@ public class CompetitorServiceImpl implements CompetitorService {
 
 	@Override
 	public CompetitorModel create(CompetitorModel competitor) {
-		StudentModel savedCompetitor = studentService.findById(competitor.getId()).get();
-		competitor.setStudent(savedCompetitor);
 		return competitorRepository.save(competitor);
 	}
 
@@ -32,9 +30,13 @@ public class CompetitorServiceImpl implements CompetitorService {
 
 	@Override
 	public CompetitorModel update(Long id, CompetitorDTO competitorDTO) {
-		CompetitorModel competitor = competitorDTO.toModel();
-		competitor.setId(id);
-		return null;
+		CompetitorModel competitor = competitorRepository.getOne(id);
+		if (competitor == null) {
+			throw new NotFoundRuntimeException();
+		}
+		competitor.setMarkLevelOne(competitorDTO.getMarkLevelOne());
+		competitor.setMarkLevelTwo(competitorDTO.getMarkLevelTwo());
+		return competitorRepository.save(competitor);
 	}
 
 }
