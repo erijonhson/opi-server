@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = RestConstants.SCHOOL_STUDANTS_URI)
 @Validated
 @Api(tags = "Students")
+@CrossOrigin
 public class StudentRest {
 
 	@Autowired
