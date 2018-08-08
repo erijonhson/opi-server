@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.olympiad;
+package br.edu.ufcg.dsc.opi.olympiad.competitor;
 
 import java.net.URI;
 import java.util.Collection;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,40 +25,40 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(value = RestConstants.COMPETITION_URI)
+@RequestMapping(value = RestConstants.COMPETITOR_URI)
 @Validated
-@Api(tags = "Competitions")
-public class CompetitionRest {
+@Api(tags = "Competitors")
+@CrossOrigin
+public class CompetitorRest {
 
 	@Autowired
-	private CompetitionService competitionService;
+	private CompetitorService competitorService;
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping({ "/", "" })
-	@ApiOperation(value = "Create a Competition", notes = "Also returns a link to retrieve the saved competition in the location header")
-	public ResponseEntity<Object> createCompetition(@Valid @RequestBody CompetitionDTO competition) {
-		CompetitionModel savedCompetition = competitionService.create(competition.toModel());
+	@ApiOperation(value = "Create a Competitor", notes = "Also returns a link to retrieve the saved competitor in the location header")
+	public ResponseEntity<Object> createCompetitor(@Valid @RequestBody CompetitorDTO competitor) {
+		CompetitorModel savedCompetitor = competitorService.create(competitor.toModel());
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedCompetition.getId()).toUri();
+				.buildAndExpand(savedCompetitor.getId()).toUri();
 
 		return ResponseEntity.created(location).build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@GetMapping({ "/", "" })
-	@ApiOperation(value = "Finds all Competitions")
-	public Collection<CompetitionDTO> indexCompetitions() {
-		return competitionService.index();
+	@GetMapping({ "/schools/{schoolId}/", "/schools/{schoolId}" })
+	@ApiOperation(value = "Finds all Competititor by School")
+	public Collection<CompetitorDTO> indexCompetitorsBySchool(@PathVariable("schoolId") Long schoolId) {
+		return competitorService.indexBySchool(schoolId);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping({ "/{id}/", "/{id}" })
 	@ApiOperation(value = "Updates a Competition")
-	public ResponseEntity<?> updateCompetition(
-			@Min(value=1) @PathVariable("id") Long id,
-			@Valid @RequestBody CompetitionDTO competition) {
-		competitionService.update(id, competition);
+	public ResponseEntity<?> updateCompetition(@Min(value = 1) @PathVariable("id") Long id,
+			@Valid @RequestBody CompetitorDTO competitor) {
+		competitorService.update(id, competitor);
 		return ResponseEntity.noContent().build();
 	}
 

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -19,6 +20,7 @@ import io.jsonwebtoken.JwtException;
 /**
  * Filter for Authentication with JWT.
  */
+@Component
 public class AuthenticationFilter extends GenericFilterBean {
 
 	/**
@@ -33,6 +35,7 @@ public class AuthenticationFilter extends GenericFilterBean {
 
 		HttpServletResponse res = SecurityUtils.fillAccessControlHeader((HttpServletResponse) response);
 		try {
+
 			HttpServletRequest req = (HttpServletRequest) request;
 
 			/*

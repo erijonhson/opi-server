@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.olympiad;
+package br.edu.ufcg.dsc.opi.olympiad.competition;
 
 import java.time.Instant;
 import java.util.Collection;

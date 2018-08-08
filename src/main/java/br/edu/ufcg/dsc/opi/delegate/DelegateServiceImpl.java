@@ -51,9 +51,6 @@ public class DelegateServiceImpl implements DelegateService {
 
 	public DelegateDTO showByEmail(final String email) {
 		UserModel delegate = userService.findByEmail(email);
-		if (delegate == null) {
-			return null;
-		}
 		return DelegateDTO.toDTO(delegate);
 	}
 

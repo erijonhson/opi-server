@@ -99,6 +99,8 @@ public class DelegateDTO implements DTO<UserModel> {
 	}
 
 	public static DelegateDTO toDTO(UserModel user) {
+		if (user == null)
+			return null;
 		return new DelegateDTO(user.getName(), user.getEmail(), null, user.getRoles());
 	}
 

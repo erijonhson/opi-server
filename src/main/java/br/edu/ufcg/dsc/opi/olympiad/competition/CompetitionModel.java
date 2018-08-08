@@ -1,4 +1,4 @@
-package br.edu.ufcg.dsc.opi.olympiad;
+package br.edu.ufcg.dsc.opi.olympiad.competition;
 
 import java.io.Serializable;
 import java.util.Date;
